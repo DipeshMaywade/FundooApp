@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const logger = require("../app/utility/logger");
 require("dotenv").config();
 
 
@@ -6,6 +7,6 @@ module.exports = () => { mongoose.connect(process.env.DBURL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
-  .then(() => console.log("connection successful"))
-  .catch((err) => console.error(err));
+  .then(() => logger.log("info","connection successful"))
+  .catch((err) => logger.log("error", err));
 }
