@@ -7,6 +7,8 @@ module.exports = () => {
     .connect(process.env.DBURL, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
+      useCreateIndex: true,
+      useFindAndModify: true,
     })
     .then(() => logger.log("info", "connection successful"))
     .catch((err) => logger.log("error", err));
