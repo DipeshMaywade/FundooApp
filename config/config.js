@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
+require("dotenv").config();
 
-module.exports = () => { mongoose.connect("mongodb://localhost/Fundoo", {
+
+module.exports = () => { mongoose.connect(process.env.DBURL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
