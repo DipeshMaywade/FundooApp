@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { passEncrypt } = require("../utility/helper");
 
 const registration = new mongoose.Schema(
   {
@@ -29,18 +30,7 @@ const registration = new mongoose.Schema(
   { timestamps: true }
 );
 
-const bcrypt = require("bcrypt");
-
-registration.pre("save", async function (next) {
-  try {
-    const salt = await bcrypt.genSalt();
-    const hashPass = await bcrypt.hash(this.password, salt);
-    this.password = hashPass;
-    next();
-  } catch (error) {
-    next(error);
-  }
-});
+passEncrypt(registration)
 
 const registrationSchema = mongoose.model("registrationSchema", registration);
 

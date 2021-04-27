@@ -5,7 +5,7 @@ const {
   GraphQLList,
   GraphQLString,
 } = require("graphql");
-
+const { schema } = require("../utility/helper");
 const { registrationSchema } = require("../models/registration");
 const { userType } = require("../types/registration");
 
@@ -61,6 +61,10 @@ const mutation = new GraphQLObjectType({
         },
       },
       resolve: (root, data) => {
+        let result = schema.validate(data);
+        if(result.error){
+          throw new Error(result.error)   
+        }
         const userModel = new registrationSchema(data);
         const newUser = userModel.save();
         if (!newUser) {
