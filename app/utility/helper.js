@@ -4,20 +4,20 @@ const jwt = require("jsonwebtoken");
 
 class Helper {
 
-passEncrypt = (registration) => {
-  registration.pre("save", async function (next) {
-    try {
-      const salt = await bcrypt.genSalt();
-      const hashPass = await bcrypt.hash(this.password, salt);
-      this.password = hashPass;
-      next();
-    } catch (error) {
-      next(error);
-    }
-  })
-};
+  passEncrypt = (registration) => {
+    registration.pre("save", async function (next) {
+      try {
+        const salt = await bcrypt.genSalt();
+        const hashPass = await bcrypt.hash(this.password, salt);
+        this.password = hashPass;
+        next();
+      } catch (error) {
+        next(error);
+      }
+    })
+  };
 
-schema = joi.object({
+  schema = joi.object({
     firstName: joi
       .string()
       .min(3)
@@ -28,7 +28,7 @@ schema = joi.object({
     password: joi.string().required()
   });
 
-  jwt = (user)=> {
+  jwtGenerator = (user) => {
     return jwt.sign({ name: user.email }, 'verySecretValue', { expiresIn: '1h' })
   }
 

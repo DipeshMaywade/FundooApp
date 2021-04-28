@@ -11,12 +11,13 @@ const userType = new GraphQLObjectType({
   }),
 });
 
-const auth = new GraphQLObjectType({
-  name: "Auth",
+const login = new GraphQLObjectType({
+  name: "Login",
   fields: () => ({
+    success: {type: GraphQLString},
     message: { type: GraphQLString },
     token: { type: GraphQLString }
   }),
 });
 
-module.exports = { userType, auth };
+module.exports = { userType, login };

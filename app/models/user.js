@@ -32,6 +32,6 @@ const registration = new mongoose.Schema(
 
 passEncrypt(registration)
 
-const registrationSchema = mongoose.model("registrationSchema", registration);
+const userRegistration = mongoose.model("UserRegistration", registration);
 
-module.exports = { registrationSchema };
+module.exports = { userRegistration };

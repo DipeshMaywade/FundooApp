@@ -6,9 +6,9 @@ const {
   GraphQLString,
 } = require("graphql");
 const bcrypt = require("bcrypt");
-const { schema, jwt } = require("../utility/helper");
-const { registrationSchema } = require("../models/user");
-const { userType, auth } = require("../types/user");
+const { schema, jwtGenerator } = require("../utility/helper");
+const { userRegistration } = require("../models/user");
+const { userType, login } = require("../types/user");
 
 const GetData = new GraphQLObjectType({
   name: "GetData",
@@ -16,7 +16,7 @@ const GetData = new GraphQLObjectType({
     users: {
       type: new GraphQLList(userType),
       resolve: function () {
-        const users = registrationSchema.find().exec();
+        const users = userRegistration.find().exec();
         if (!users) {
           throw new Error("Error");
         }
@@ -26,7 +26,7 @@ const GetData = new GraphQLObjectType({
   }),
 });
 
-const userRegistration = new GraphQLObjectType({
+const registration = new GraphQLObjectType({
   name: "Registration",
   fields: () => ({
     addUser: {
@@ -51,7 +51,7 @@ const userRegistration = new GraphQLObjectType({
           throw new Error(result.error);
         }
         try {
-          const userModel = new registrationSchema(data);
+          const userModel = new userRegistration(data);
           const newUser = userModel.save();
           if (!newUser) {
             throw new Error("Error");
@@ -63,7 +63,7 @@ const userRegistration = new GraphQLObjectType({
       },
     },
     loginUser: {
-      type: auth,
+      type: login,
       args: {
         email: {
           type: new GraphQLNonNull(GraphQLString),
@@ -72,25 +72,30 @@ const userRegistration = new GraphQLObjectType({
           type: new GraphQLNonNull(GraphQLString),
         },
       },
-
       resolve: async (root, args) => {
-        var resResult = {};
+        let response = {}
         let result = schema.validate(args);
         if (result.error) {
           throw new Error(result.error);
         }
         try {
-          user = await registrationSchema.findOne({ email: args.email });
+          user = await userRegistration.findOne({ email: args.email });
           if (!user) {
-            throw new Error("incorrect email user not Found");
+            response.success = false
+            response.message = "incorrect email user not Found"
+            return response;
           }
           if (user) {
             const isValid = await bcrypt.compare(args.password, user.password);
             if (!isValid) {
-              throw new Error("Incorrect password ");
+              response.success = false
+              response.message = "incorrect password."
+              return response;
             } else {
-              token = jwt(user)
-              return { message: "Login Sucessfull", token: token};
+              response.success = true
+              response.message = "Login Sucessfull token generated for 1hr"
+              response.token = jwtGenerator(user)
+              return response
             }
           }
         } catch (error) {
@@ -103,5 +108,5 @@ const userRegistration = new GraphQLObjectType({
 
 module.exports = new GraphQLSchema({
   query: GetData,
-  mutation: userRegistration,
+  mutation: registration,
 });

@@ -1,15 +1,18 @@
-### Title: Fundoo App
+# FundooNotesApp
 
-### Description:
+## Author : Dipesh Maywade
 
-=> Using This App User Has Ability To Register With Name, Password And Unique Email Id.
+## Descrption
+    This project Based on GraphQL API using this fundo notes user has ability to login and registartion with unique email and password.
+    checkout package.json to know  used packages in this project.
 
-### To Clone Project In Local System Follw This Steps:
+## Project Setup Steps         
 
-=> Go To The Git Base.
-=> Go To The Path Where You Want Clone Project.
-=> Use This Command: "git clone https://github.com/DipeshMaywade/FundooApp".
-=> install nodeJS in local machine.
-=> install dotenv and create .env file for database details sample given in envSample file.
+### Step1:
+    Clone the repository in your system using this command "git clone https://github.com/DipeshMaywade/FundooApp"
 
-### Author Name: Dipesh Maywade
+### Step2:
+    Install given npm packages which is required.
+
+### Step3:
+    run project localhost using given port number node.
