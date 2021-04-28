@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const logger = require("../app/utility/logger");
+const logger = require("../src/utility/logger");
 require("dotenv").config();
 
 module.exports = () => {
