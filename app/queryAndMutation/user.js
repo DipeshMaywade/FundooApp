@@ -5,9 +5,8 @@ const {
   GraphQLList,
   GraphQLString,
 } = require("graphql");
-const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const { schema } = require("../utility/helper");
+const { schema, jwt } = require("../utility/helper");
 const { registrationSchema } = require("../models/user");
 const { userType, auth } = require("../types/user");
 
@@ -74,18 +73,26 @@ const userRegistration = new GraphQLObjectType({
         },
       },
 
-      resolve: async (root, data) => {
-        let result = schema.validate(data);
+      resolve: async (root, args) => {
+        var resResult = {};
+        let result = schema.validate(args);
         if (result.error) {
           throw new Error(result.error);
         }
         try {
-          user = await registrationSchema.findOne({ email: data.email });
-          console.log(user);
+          user = await registrationSchema.findOne({ email: args.email });
           if (!user) {
-            throw new Error("user not Found");
+            throw new Error("incorrect email user not Found");
           }
-          return { user };
+          if (user) {
+            const isValid = await bcrypt.compare(args.password, user.password);
+            if (!isValid) {
+              throw new Error("Incorrect password ");
+            } else {
+              token = jwt(user)
+              return { message: "Login Sucessfull", token: token};
+            }
+          }
         } catch (error) {
           throw new Error(error);
         }

@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt");
 const joi = require("joi");
+const jwt = require("jsonwebtoken");
 
 class Helper {
 
@@ -27,6 +28,9 @@ schema = joi.object({
     password: joi.string().required()
   });
 
-}
+  jwt = (user)=> {
+    return jwt.sign({ name: user.email }, 'verySecretValue', { expiresIn: '1h' })
+  }
 
+}
 module.exports = new Helper();
