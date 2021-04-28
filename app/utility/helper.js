@@ -21,10 +21,9 @@ schema = joi.object({
       .string()
       .min(3)
       .max(10)
-      .pattern(new RegExp("^[A-Z]{1}[a-z]{2,}$"))
-      .required(),
-    lastName: joi.string().required().pattern(new RegExp("^[A-Z]{1}[a-z]{2,}$")),
-    email: joi.string().email().required(),
+      .pattern(new RegExp("^[A-Z]{1}[a-z]{2,}$")),
+    lastName: joi.string().pattern(new RegExp("^[A-Z]{1}[a-z]{2,}$")),
+    email: joi.string().email().required().pattern(new RegExp("^[a-z0-9](\.?[a-z0-9]){5,}@g(oogle)?mail\.com$")),
     password: joi.string().required()
   });
 
