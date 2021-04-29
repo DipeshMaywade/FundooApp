@@ -103,6 +103,37 @@ const registration = new GraphQLObjectType({
         }
       },
     },
+    forgetPass: {
+      type: login,
+      args: {
+        email: {
+          type: new GraphQLNonNull(GraphQLString),
+        },
+      },
+      resolve: async (root, args) => {
+        let response = {}
+        let result = schema.validate(args);
+        if (result.error) {
+          throw new Error(result.error);
+        }
+        try {
+          user = await userRegistration.findOne({ email: args.email });
+          if (!user) {
+            response.success = false
+            response.message = "incorrect email user not Found"
+            return response;
+          }else {
+              response.success = true
+              response.message = "Token send to the registered email id"
+              response.token = jwtGenerator(user)
+              return response
+            }
+          } 
+          catch (error) {
+          throw new Error(error);
+        }
+      },
+    },
   }),
 });
 

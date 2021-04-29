@@ -15,7 +15,6 @@ const registration = new mongoose.Schema(
     },
     password: {
       type: String,
-      require: true,
     },
     email: {
       type: String,
