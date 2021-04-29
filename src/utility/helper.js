@@ -1,6 +1,8 @@
 const bcrypt = require("bcrypt");
 const joi = require("joi");
 const jwt = require("jsonwebtoken");
+const nodemailer = require("nodemailer");
+const logger = require("./logger");
 
 class Helper {
 
@@ -28,8 +30,37 @@ class Helper {
     password: joi.string()
   });
 
-  jwtGenerator = (user) => {
-    return jwt.sign({ name: user.email }, 'verySecretValue', { expiresIn: '1h' })
+  jwtGenerator = (payload) => {
+    return jwt.sign( { payload }, 'verySecretValue', { expiresIn: '1h' })
+  }
+
+
+
+  forgetPass = (token, mail) => {
+    let transporter = nodemailer.createTransport({
+      service: "gmail",
+      secure: false,
+      auth: {
+        user: "dipeshmaywade@gmail.com",
+        pass: "Radharam@123"
+      }
+    })
+    let mailOption = {
+      from: "dipeshmaywade@gmail.com",
+      to: mail,
+      subject: "Forget Password",
+      text: `token for reset password is: ${token}`
+    }
+    transporter.sendMail(mailOption, (err,info) => {
+      if(err) {
+        logger.log(`error`, err)
+      }
+      else{
+        logger,log(`info`, `email sent to ${info.response}`)
+      }
+    })
+
+
   }
 
 }

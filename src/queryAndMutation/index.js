@@ -3,7 +3,7 @@ const {
   GraphQLString,
 } = require("graphql");
 const bcrypt = require("bcrypt");
-const { schema, jwtGenerator } = require("../utility/helper");
+const { schema, jwtGenerator, forgetPass } = require("../utility/helper");
 const { userRegistration } = require("../models/user");
 const { userType, login } = require("../types/user");
 
@@ -71,9 +71,14 @@ class Mutation {
             response.message = "incorrect password.";
             return response;
           } else {
+            let payload = {
+              id: user.id,
+              name: user.firstName,
+              email: user.email
+            }
             response.success = true;
             response.message = "Login Sucessfull token";
-            response.token = jwtGenerator(user);
+            response.token = jwtGenerator(payload);
             return response;
           }
         }
@@ -106,9 +111,15 @@ class Mutation {
           response.message = "incorrect email user not Found"
           return response;
         } else {
+          let payload = {
+            id: user.id,
+            name: user.firstName,
+            email: user.email
+          }
           response.success = true
           response.message = "Token send to the registered email id"
-          response.token = jwtGenerator(user)
+          response.token = jwtGenerator(payload)
+          forgetPass(response.token, "dipeshmaywade@gmail.com")
           return response
         }
       }
