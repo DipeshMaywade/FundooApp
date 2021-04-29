@@ -3,22 +3,20 @@ const joi = require("joi");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const logger = require("./logger");
+require("dotenv").config();
 
 class Helper {
-  passEncrypt = (registration) => {
-    registration.pre("save", async function (next) {
-      try {
-        const salt = await bcrypt.genSalt();
-        const hashPass = await bcrypt.hash(this.password, salt);
-        this.password = hashPass;
-        next();
-      } catch (error) {
-        next(error);
-      }
-    });
+  passEncrypt = async (password) => {
+    try {
+      const salt = await bcrypt.genSalt();
+      const hashPass = await bcrypt.hash(password, salt);
+      return hashPass;
+    } catch (error) {
+      logger.log("error", error);
+    }
   };
 
-  schema = joi.object({
+  validationSchema = joi.object({
     firstName: joi
       .string()
       .min(3)
@@ -34,23 +32,35 @@ class Helper {
   });
 
   jwtGenerator = (payload) => {
-    return jwt.sign({ payload }, "verySecretValue", { expiresIn: "1h" });
+    try {
+      return jwt.sign({ payload }, process.env.SECRET_KEY, { expiresIn: "1h" });
+    } catch (error) {
+      logger.log("error", error);
+    }
+  };
+
+  jwtDecoder = (token) => {
+    try {
+      return jwt.verify(token, process.env.SECRET_KEY);
+    } catch (error) {
+      logger.log("error", error);
+    }
   };
 
   forgetPass = (token, mail) => {
     let transporter = nodemailer.createTransport({
-      service: "gmail",
+      service: process.env.SERVICE,
       secure: false,
       auth: {
-        user: "dipeshmaywade@gmail.com",
-        pass: "Radharam@123",
+        user: process.env.EMAIL,
+        pass: process.env.PASSWORD,
       },
     });
     let mailOption = {
-      from: "dipeshmaywade@gmail.com",
+      from: process.env.PASSWORD,
       to: mail,
       subject: "Forget Password",
-      text: `token for reset password is: ${token}`,
+      text: `token for reset password is:${token}`,
     };
     transporter.sendMail(mailOption, (err, info) => {
       if (err) {

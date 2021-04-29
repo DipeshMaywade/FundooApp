@@ -1,13 +1,11 @@
 const {
   GraphQLSchema,
   GraphQLObjectType,
-  GraphQLNonNull,
   GraphQLList,
-  GraphQLString,
 } = require("graphql");
 const { userRegistration } = require("../models/user");
 const { userType } = require("../types/user");
-const { addUser, loginUser, forgetPass } = require("./index")
+const { addUser, loginUser, forgetPass, resetPass } = require("./index")
 
 const Query = new GraphQLObjectType({
   name: "GetData",
@@ -26,7 +24,7 @@ const Query = new GraphQLObjectType({
 
 const Mutation = new GraphQLObjectType({
   name: "Registration",
-  fields: { addUser, loginUser, forgetPass }
+  fields: { addUser, loginUser, forgetPass, resetPass }
 });
 
 module.exports = new GraphQLSchema({
