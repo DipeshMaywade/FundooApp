@@ -119,7 +119,7 @@ class Mutation {
           response.success = true
           response.message = "Token send to the registered email id"
           response.token = jwtGenerator(payload)
-          forgetPass(response.token, "dipeshmaywade@gmail.com")
+          forgetPass(response.token, user.email)
           return response
         }
       }

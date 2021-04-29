@@ -5,7 +5,6 @@ const nodemailer = require("nodemailer");
 const logger = require("./logger");
 
 class Helper {
-
   passEncrypt = (registration) => {
     registration.pre("save", async function (next) {
       try {
@@ -16,7 +15,7 @@ class Helper {
       } catch (error) {
         next(error);
       }
-    })
+    });
   };
 
   schema = joi.object({
@@ -26,15 +25,17 @@ class Helper {
       .max(10)
       .pattern(new RegExp("^[A-Z]{1}[a-z]{2,}$")),
     lastName: joi.string().pattern(new RegExp("^[A-Z]{1}[a-z]{2,}$")),
-    email: joi.string().email().required().pattern(new RegExp("^[a-z0-9](\.?[a-z0-9]){5,}@g(oogle)?mail\.com$")),
-    password: joi.string()
+    email: joi
+      .string()
+      .email()
+      .required()
+      .pattern(new RegExp("^[a-z0-9](.?[a-z0-9]){5,}@g(oogle)?mail.com$")),
+    password: joi.string(),
   });
 
   jwtGenerator = (payload) => {
-    return jwt.sign( { payload }, 'verySecretValue', { expiresIn: '1h' })
-  }
-
-
+    return jwt.sign({ payload }, "verySecretValue", { expiresIn: "1h" });
+  };
 
   forgetPass = (token, mail) => {
     let transporter = nodemailer.createTransport({
@@ -42,26 +43,22 @@ class Helper {
       secure: false,
       auth: {
         user: "dipeshmaywade@gmail.com",
-        pass: "Radharam@123"
-      }
-    })
+        pass: "Radharam@123",
+      },
+    });
     let mailOption = {
       from: "dipeshmaywade@gmail.com",
       to: mail,
       subject: "Forget Password",
-      text: `token for reset password is: ${token}`
-    }
-    transporter.sendMail(mailOption, (err,info) => {
-      if(err) {
-        logger.log(`error`, err)
+      text: `token for reset password is: ${token}`,
+    };
+    transporter.sendMail(mailOption, (err, info) => {
+      if (err) {
+        logger.log(`error`, err);
+      } else {
+        logger, log(`info`, `email sent to ${info.response}`);
       }
-      else{
-        logger,log(`info`, `email sent to ${info.response}`)
-      }
-    })
-
-
-  }
-
+    });
+  };
 }
 module.exports = new Helper();
