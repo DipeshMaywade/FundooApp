@@ -1,6 +1,6 @@
 const { GraphQLNonNull, GraphQLString } = require("graphql");
 const bcrypt = require("bcrypt");
-const {validationSchema, jwtGenerator, forgetPass, jwtDecoder, passEncrypt } = require("../utility/helper");
+const {validationSchema, jwtGenerator, forgotPass, jwtDecoder, passEncrypt } = require("../utility/helper");
 const { userRegistration } = require("../models/user");
 const { userType, outputType } = require("../types/user");
 
@@ -71,11 +71,10 @@ class Mutation {
           } else {
             let payload = {
               id: user.id,
-              name: user.firstName,
               email: user.email,
             };
             response.success = true;
-            response.message = "Login Sucessfull token";
+            response.message = "Login Sucessful token";
             response.token = jwtGenerator(payload);
             return response;
           }
@@ -87,7 +86,7 @@ class Mutation {
       }
     },
   };
-  forgetPass = {
+  forgotPass = {
     type: outputType,
     args: {
       email: {
@@ -111,13 +110,12 @@ class Mutation {
         } else {
           let payload = {
             id: user.id,
-            name: user.firstName,
             email: user.email,
           };
           response.success = true;
           response.message = "Token send to the registered email id";
           response.token = jwtGenerator(payload);
-          forgetPass(response.token, user.email);
+          forgotPass(response.token, user.email);
           return response;
         }
       } catch (error) {

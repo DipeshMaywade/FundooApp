@@ -47,7 +47,7 @@ class Helper {
     }
   };
 
-  forgetPass = (token, mail) => {
+  forgotPass = (token, mail) => {
     let transporter = nodemailer.createTransport({
       service: process.env.SERVICE,
       secure: false,
@@ -59,14 +59,14 @@ class Helper {
     let mailOption = {
       from: process.env.PASSWORD,
       to: mail,
-      subject: "Forget Password",
-      text: `token for reset password is:${token}`,
+      subject: "Forgot Password",
+      text: `token for reset password is: ${token}`,
     };
     transporter.sendMail(mailOption, (err, info) => {
       if (err) {
         logger.log(`error`, err);
       } else {
-        logger, log(`info`, `email sent to ${info.response}`);
+        logger.log(`info`, `email sent to ${info.response}`);
       }
     });
   };

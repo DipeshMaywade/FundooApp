@@ -11,5 +11,5 @@ module.exports = () => {
       useFindAndModify: true,
     })
     .then(() => logger.log("info", "connection successful"))
-    .catch((err) => logger.log("error", err));
+    .catch((err) => ("error", err));
 };
