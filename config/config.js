@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
-const logger = require("../src/utility/logger");
-require("dotenv").config();
+const mongoose = require('mongoose');
+const logger = require('../src/utility/logger');
+require('dotenv').config();
 
 module.exports = () => {
   mongoose
@@ -10,6 +10,6 @@ module.exports = () => {
       useCreateIndex: true,
       useFindAndModify: true,
     })
-    .then(() => logger.log("info", "connection successful"))
-    .catch((err) => ("error", err));
+    .then(() => logger.log('info', 'connection successful'))
+    .catch((err) => ('error', err));
 };

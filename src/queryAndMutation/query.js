@@ -1,6 +1,6 @@
-const { userType } = require("../types/user");
-const { userRegistration } = require("../models/user");
-const { GraphQLList } = require("graphql");
+const { userType } = require('../types/user');
+const { userRegistration } = require('../models/user');
+const { GraphQLList } = require('graphql');
 
 class Query {
   users = {
@@ -13,4 +13,4 @@ class Query {
     },
   };
 }
-module.exports = new Query()
+module.exports = new Query();

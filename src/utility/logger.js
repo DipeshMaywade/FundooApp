@@ -1,20 +1,20 @@
-const { createLogger, transports, format } = require("winston");
-require("dotenv").config();
+const { createLogger, transports, format } = require('winston');
+require('dotenv').config();
 
 const logger = createLogger({
   transports: [
     new transports.File({
-      filename: "./log/info.log",
-      level: "info",
+      filename: './log/info.log',
+      level: 'info',
       format: format.combine(format.timestamp(), format.json()),
     }),
     new transports.File({
-      filename: "./log/error.log",
-      level: "error",
+      filename: './log/error.log',
+      level: 'error,warnig',
       format: format.combine(format.timestamp(), format.json()),
     }),
     new transports.Console({
-      level: "info",
+      level: 'info',
       format: format.combine(format.timestamp(), format.simple()),
     }),
   ],

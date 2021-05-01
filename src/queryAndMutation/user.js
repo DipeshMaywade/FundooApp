@@ -1,14 +1,14 @@
-const { GraphQLSchema, GraphQLObjectType } = require("graphql");
-const { addUser, loginUser, forgotPass, resetPass } = require("./mutation");
-const { users } = require("./query")
+const { GraphQLSchema, GraphQLObjectType } = require('graphql');
+const { addUser, loginUser, forgotPass, resetPass } = require('./mutation');
+const { users } = require('./query');
 
 const Query = new GraphQLObjectType({
-  name: "GetData",
+  name: 'GetData',
   fields: { users },
 });
 
 const Mutation = new GraphQLObjectType({
-  name: "Registration",
+  name: 'Registration',
   fields: { addUser, loginUser, forgotPass, resetPass },
 });
 
