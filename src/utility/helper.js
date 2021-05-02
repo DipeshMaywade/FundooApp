@@ -31,14 +31,6 @@ class Helper {
     }
   };
 
-  jwtDecoder = (token) => {
-    try {
-      return jwt.verify(token, process.env.SECRET_KEY);
-    } catch (error) {
-      logger.error('error', error);
-    }
-  };
-
   sendMail = (token, mail) => {
     let transporter = nodemailer.createTransport({
       service: process.env.SERVICE,

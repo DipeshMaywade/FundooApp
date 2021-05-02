@@ -13,10 +13,6 @@ const logger = createLogger({
       level: 'error',
       format: format.combine(format.timestamp(), format.json()),
     }),
-    new transports.Console({
-      level: 'info',
-      format: format.combine(format.timestamp(), format.simple()),
-    }),
   ],
 });
 

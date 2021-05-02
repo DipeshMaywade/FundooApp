@@ -6,7 +6,20 @@ const { userType, outputType } = require('../types/user');
 const checkAuth = require('../utility/auth');
 const loggers = require('../utility/logger');
 
+/**user all type of mutation fields are wrapped into the class
+ * @class Mutation
+ * @property addUser, loginUser, forgetPassword, resetPassword
+ * @description class for all the mutation property
+ */
 class Mutation {
+  /**
+   * @fileds addUser
+   * @type userType
+   * @argument args
+   * @param {resolveParameter} root
+   * @param {resolveParameter} data
+   * @description addUser fields provide ability to create new user account for user
+   */
   addUser = {
     type: userType,
     args: {
@@ -42,6 +55,14 @@ class Mutation {
       }
     },
   };
+
+  /**
+   * @fileds loginUser
+   * @type outputType
+   * @param {resolveParameter} root
+   * @param {resolveParameter} args
+   * @description login fields provide ability to user login with correct email and password and genrate a tocken.
+   */
   loginUser = {
     type: outputType,
     args: {
@@ -90,7 +111,15 @@ class Mutation {
       }
     },
   };
-  forgotPass = {
+
+  /**
+   * @fileds forgotPassword
+   * @type outputType
+   * @param {resolveParameter} root
+   * @param {resolveParameter} args
+   * @description forgotPassword fields provide ability to send mail on registered email ID with reset password token.
+   */
+  forgotPassword = {
     type: outputType,
     args: {
       email: {
@@ -130,7 +159,16 @@ class Mutation {
       }
     },
   };
-  resetPass = {
+
+  /**
+   * @fileds resetPassword
+   * @type outputType
+   * @param {resolveParameter} root
+   * @param {resolveParameter} args
+   * @param {resolveParameter} context
+   * @description resetPassword provide ability to reset password only for authenticate user using jwt.
+   */
+  resetPassword = {
     type: outputType,
     args: {
       newPassword: {
@@ -141,8 +179,8 @@ class Mutation {
       },
     },
     resolve: async (root, args, context) => {
-      const verifiedUser = checkAuth(context);
       let response = {};
+      const verifiedUser = checkAuth(context);
       if (args.newPassword === args.confirmPassword) {
         try {
           if (!verifiedUser) {
