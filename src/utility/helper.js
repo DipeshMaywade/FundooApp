@@ -39,7 +39,7 @@ class Helper {
     }
   };
 
-  forgotPass = (token, mail) => {
+  sendMail = (token, mail) => {
     let transporter = nodemailer.createTransport({
       service: process.env.SERVICE,
       secure: false,

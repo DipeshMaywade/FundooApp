@@ -8,7 +8,7 @@ module.exports = () => {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useCreateIndex: true,
-      useFindAndModify: true,
+      useFindAndModify: false,
     })
     .then(() => logger.log('info', 'connection successful'))
     .catch((err) => ('error', err));

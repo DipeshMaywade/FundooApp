@@ -1,8 +1,10 @@
 const { GraphQLNonNull, GraphQLString } = require('graphql');
 const bcrypt = require('bcrypt');
-const { validationSchema, jwtGenerator, forgotPass, jwtDecoder, passEncrypt } = require('../utility/helper');
+const { validationSchema, jwtGenerator, sendMail, passEncrypt } = require('../utility/helper');
 const { userRegistration } = require('../models/user');
 const { userType, outputType } = require('../types/user');
+const checkAuth = require('../utility/auth');
+const loggers = require('../utility/logger');
 
 class Mutation {
   addUser = {
@@ -35,6 +37,7 @@ class Mutation {
         }
         return newUser;
       } catch (error) {
+        loggers.error(`error`, error);
         return { message: error };
       }
     },
@@ -59,7 +62,7 @@ class Mutation {
         let user = await userRegistration.findOne({ email: args.email });
         if (!user) {
           response.success = false;
-          response.message = 'incorrect email user not Found';
+          response.message = 'incorrect email, user not Found';
           return response;
         }
         if (user) {
@@ -74,7 +77,7 @@ class Mutation {
               email: user.email,
             };
             response.success = true;
-            response.message = 'Login Sucessful token';
+            response.message = 'Login successful';
             response.token = jwtGenerator(payload);
             return response;
           }
@@ -82,6 +85,7 @@ class Mutation {
       } catch (error) {
         response.success = false;
         response.message = error;
+        loggers.error(`error`, response);
         return response;
       }
     },
@@ -115,12 +119,13 @@ class Mutation {
           response.success = true;
           response.message = 'Token send to the registered email id';
           response.token = jwtGenerator(payload);
-          forgotPass(response.token, user.email);
+          sendMail(response.token, user.email);
           return response;
         }
       } catch (error) {
         response.success = false;
         response.message = error;
+        loggers.error(`error`, response);
         return response;
       }
     },
@@ -128,9 +133,6 @@ class Mutation {
   resetPass = {
     type: outputType,
     args: {
-      token: {
-        type: new GraphQLNonNull(GraphQLString),
-      },
       newPassword: {
         type: new GraphQLNonNull(GraphQLString),
       },
@@ -138,18 +140,18 @@ class Mutation {
         type: new GraphQLNonNull(GraphQLString),
       },
     },
-    resolve: async (root, args) => {
+    resolve: async (root, args, context) => {
+      const verifiedUser = checkAuth(context);
       let response = {};
       if (args.newPassword === args.confirmPassword) {
         try {
-          let user = jwtDecoder(args.token);
-          if (!user) {
+          if (!verifiedUser) {
             response.success = false;
             response.message = 'incorrect token';
             return response;
           } else {
-            let password = await passEncrypt(args.confirmPassword);
-            await userRegistration.findByIdAndUpdate(user.payload.id, { password: password }, { new: true });
+            let newpassword = await passEncrypt(args.confirmPassword);
+            await userRegistration.findByIdAndUpdate(verifiedUser.payload.id, { password: newpassword });
             response.success = true;
             response.message = 'password updated successfully';
             return response;
@@ -157,7 +159,7 @@ class Mutation {
         } catch (error) {
           response.success = false;
           response.message = error;
-          //logger
+          loggers.error(`error`, response);
           return response;
         }
       } else {
