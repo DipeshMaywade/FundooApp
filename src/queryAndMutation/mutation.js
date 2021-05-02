@@ -181,7 +181,8 @@ class Mutation {
     resolve: async (root, args, context) => {
       let response = {};
       const verifiedUser = checkAuth(context);
-      if (args.newPassword === args.confirmPassword) {
+      let result = validationSchema.validate(args);
+      if (args.newPassword === args.confirmPassword && !result.error) {
         try {
           if (!verifiedUser) {
             response.success = false;
@@ -202,7 +203,7 @@ class Mutation {
         }
       } else {
         response.success = false;
-        response.message = 'password does not matched';
+        response.message = 'password does not matched or invalid formate';
         return response;
       }
     },
