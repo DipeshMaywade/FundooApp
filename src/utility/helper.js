@@ -6,6 +6,11 @@ const logger = require('./logger');
 require('dotenv').config();
 
 class Helper {
+  /**
+   * @method passEncrypt
+   * @param {orignalPassword} password
+   * @description For encrypt password before save or reset into database
+   */
   passEncrypt = async (password) => {
     try {
       const salt = await bcrypt.genSalt();
@@ -16,6 +21,9 @@ class Helper {
     }
   };
 
+  /**
+   * @description For validate the data which is provided by user for login or register or reset
+   */
   validationSchema = joi.object({
     firstName: joi.string().min(3).max(10).pattern(new RegExp('^[A-Z]{1}[a-z]{2,}$')),
     lastName: joi.string().pattern(new RegExp('^[A-Z]{1}[a-z]{2,}$')),
@@ -25,6 +33,11 @@ class Helper {
     confirmPassword: joi.string().pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()]{1}).{8,}$')),
   });
 
+  /**
+   * @method jwtGenerator
+   * @param {object} payload
+   * @description jwtGenerator method for genrate a json web token with secret the help of SECRET_KEY.
+   */
   jwtGenerator = (payload) => {
     try {
       return jwt.sign({ payload }, process.env.SECRET_KEY, { expiresIn: '1h' });
@@ -33,6 +46,12 @@ class Helper {
     }
   };
 
+  /**
+   * @method sendMail
+   * @param token
+   * @param mail
+   * @description used for sending a mail on registered user email id with JWT token for reseting password
+   */
   sendMail = (token, mail) => {
     let transporter = nodemailer.createTransport({
       service: process.env.SERVICE,
