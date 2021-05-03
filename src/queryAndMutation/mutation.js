@@ -180,7 +180,7 @@ class Mutation {
     },
     resolve: async (root, args, context) => {
       let response = {};
-      const verifiedUser = checkAuth(context);
+      const verifiedUser = await checkAuth(context);
       let result = validationSchema.validate(args);
       if (args.newPassword === args.confirmPassword && !result.error) {
         try {

@@ -2,24 +2,6 @@ const jwt = require('jsonwebtoken');
 const loggers = require('./logger');
 require('dotenv').config();
 
-// const auth = async (req, res, next) => {
-//   const token = req.headers.auth?.split(' ')[1] || '';
-//   if (token) {
-//     try {
-//       const user = await jwt.verify(token, process.env.SECRET_KEY);
-//       req.verifiedUser = user.payload;
-//       console.log('success', user.payload);
-//       next();
-//     } catch (error) {
-//       console.log('failed');
-//       next();
-//     }
-//   } else {
-//     console.log('formet wrong/orno token');
-//   }
-// };
-// module.exports = { auth };
-
 module.exports = (context) => {
   const authHeader = context.headers.authorization;
   if (authHeader) {
@@ -36,3 +18,4 @@ module.exports = (context) => {
   }
   loggers.error(`error`, `please enter valid header`);
 };
+// use es6 class

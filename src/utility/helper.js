@@ -46,6 +46,8 @@ class Helper {
     }
   };
 
+  // compare need to move here
+
   /**
    * @method sendMail
    * @param token
