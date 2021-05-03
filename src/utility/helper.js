@@ -2,7 +2,9 @@ const bcrypt = require('bcrypt');
 const joi = require('joi');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
+const ejs = require('ejs');
 const logger = require('./logger');
+
 require('dotenv').config();
 
 class Helper {
@@ -19,6 +21,11 @@ class Helper {
     } catch (error) {
       logger.log('error', error);
     }
+  };
+
+  comparePassword = async (givenPassword, password) => {
+    let result = bcrypt.compare(givenPassword, password);
+    return result;
   };
 
   /**
@@ -54,28 +61,31 @@ class Helper {
    * @param mail
    * @description used for sending a mail on registered user email id with JWT token for reseting password
    */
-  sendMail = (token, mail) => {
-    let transporter = nodemailer.createTransport({
-      service: process.env.SERVICE,
-      secure: false,
+
+  sendMail = (token, email) => {
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
       auth: {
         user: process.env.EMAIL,
         pass: process.env.PASSWORD,
       },
     });
-    let mailOption = {
-      from: process.env.PASSWORD,
-      to: mail,
-      subject: 'Forgot Password',
-      text: `token for reset password is: ${token}`,
-    };
-    transporter.sendMail(mailOption, (err, info) => {
-      if (err) {
-        logger.error(`error`, err);
+    ejs.renderFile('src/views/resetPassword.ejs', (error, result) => {
+      if (error) {
+        logger.log('error', error);
       } else {
-        logger.log(`info`, `email sent to ${info.response}`);
+        const message = {
+          from: process.env.EMAIL,
+          to: email,
+          subject: 'Reset your password',
+          html: `${result}<h4> ${token} </h4>`,
+        };
+        transporter.sendMail(message, (err, info) => {
+          err ? logger.error('error', err) : logger.log(`info`, `email sent to ${info.response}`);
+        });
       }
     });
   };
 }
+
 module.exports = new Helper();

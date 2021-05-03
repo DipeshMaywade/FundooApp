@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const { graphqlHTTP } = require('express-graphql');
-const schema = require('./src/queryAndMutation/user');
+const schema = require('./src/queryAndMutation/index');
 const logger = require('./src/utility/logger');
 const { fundooConnection } = require('./config/config');
 require('dotenv').config();

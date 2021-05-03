@@ -1,9 +1,8 @@
 const { GraphQLNonNull, GraphQLString } = require('graphql');
-const bcrypt = require('bcrypt');
-const { validationSchema, jwtGenerator, sendMail, passEncrypt } = require('../utility/helper');
+const { validationSchema, jwtGenerator, sendMail, passEncrypt, comparePassword } = require('../utility/helper');
 const { userRegistration } = require('../models/user');
 const { userType, outputType } = require('../types/user');
-const checkAuth = require('../utility/auth');
+const { checkAuth } = require('../utility/auth');
 const loggers = require('../utility/logger');
 
 /**user all type of mutation fields are wrapped into the class
@@ -87,7 +86,7 @@ class Mutation {
           return response;
         }
         if (user) {
-          let isValid = await bcrypt.compare(args.password, user.password);
+          let isValid = await comparePassword(args.password, user.password);
           if (!isValid) {
             response.success = false;
             response.message = 'incorrect password.';

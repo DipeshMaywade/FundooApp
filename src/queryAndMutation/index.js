@@ -1,6 +1,6 @@
 const { GraphQLSchema, GraphQLObjectType } = require('graphql');
-const { addUser, loginUser, forgotPassword, resetPassword } = require('./mutation');
-const { users } = require('./query');
+const { addUser, loginUser, forgotPassword, resetPassword } = require('./user.mutation');
+const { users } = require('./user.query');
 
 const Query = new GraphQLObjectType({
   name: 'GetData',
