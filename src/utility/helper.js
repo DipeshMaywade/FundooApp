@@ -23,8 +23,14 @@ class Helper {
     }
   };
 
-  comparePassword = async (givenPassword, password) => {
-    let result = bcrypt.compare(givenPassword, password);
+  /**
+   * @method comparePassword
+   * @param storedPassword
+   * @param givenPassword
+   * @description For compare encrypted storedPassword with user provided givenPassword
+   */
+  comparePassword = async (givenPassword, storedPassword) => {
+    let result = bcrypt.compare(givenPassword, storedPassword);
     return result;
   };
 
@@ -52,8 +58,6 @@ class Helper {
       logger.error('error', error);
     }
   };
-
-  // compare need to move here
 
   /**
    * @method sendMail

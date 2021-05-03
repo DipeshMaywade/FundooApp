@@ -17,7 +17,7 @@ class Mutation {
    * @argument args
    * @param {resolveParameter} root
    * @param {resolveParameter} data
-   * @description addUser fields provide ability to create new user account for user
+   * @description addUser fields provide ability to create new user account for
    */
   addUser = {
     type: userType,
