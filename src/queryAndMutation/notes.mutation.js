@@ -40,6 +40,43 @@ class NotesMutation {
       }
     },
   };
+
+  updateNotes = {
+    type: notesType,
+    args: {
+      id: {
+        type: new GraphQLNonNull(GraphQLString),
+      },
+      title: {
+        type: new GraphQLNonNull(GraphQLString),
+      },
+      notes: {
+        type: new GraphQLNonNull(GraphQLString),
+      },
+    },
+    resolve: async (root, args, context) => {
+      const verifiedUser = await checkAuth(context);
+      try {
+        if (!verifiedUser) {
+          return { title: 'please login first' };
+        } else {
+          let updatedNote = {
+            title: args.title,
+            notes: args.notes,
+          };
+          let notesUpdate = await notes.findOneAndUpdate({ _id: args.id, authorId: verifiedUser.payload.id }, updatedNote);
+          if (!notesUpdate) {
+            loggers.error(`error`, `Note not found`);
+            return null;
+          }
+          return notesUpdate;
+        }
+      } catch (error) {
+        loggers.error(`error`, error);
+        return { title: error };
+      }
+    },
+  };
 }
 
 module.exports = new NotesMutation();
