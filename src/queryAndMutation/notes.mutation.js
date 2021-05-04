@@ -1,5 +1,4 @@
 const { GraphQLNonNull, GraphQLString } = require('graphql');
-const { validationSchema, jwtGenerator, sendMail, passEncrypt, comparePassword } = require('../utility/helper');
 const { notes } = require('../models/notes');
 const { notesType } = require('../types/notes');
 const { checkAuth } = require('../utility/auth');
@@ -70,6 +69,33 @@ class NotesMutation {
             return null;
           }
           return notesUpdate;
+        }
+      } catch (error) {
+        loggers.error(`error`, error);
+        return { title: error };
+      }
+    },
+  };
+
+  deleteNote = {
+    type: notesType,
+    args: {
+      id: {
+        type: new GraphQLNonNull(GraphQLString),
+      },
+    },
+    resolve: async (root, args, context) => {
+      const verifiedUser = await checkAuth(context);
+      try {
+        if (!verifiedUser) {
+          return { title: 'please login first' };
+        } else {
+          let notesUpdate = await notes.findOneAndDelete({ _id: args.id, authorId: verifiedUser.payload.id });
+          if (!notesUpdate) {
+            loggers.error(`error`, `Note not found`);
+            return null;
+          }
+          return { title: 'Note successfully deleted' };
         }
       } catch (error) {
         loggers.error(`error`, error);
