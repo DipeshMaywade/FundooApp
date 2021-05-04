@@ -38,7 +38,7 @@ class Helper {
    * @description For validate the data which is provided by user for login or register or reset
    */
   validationSchema = joi.object({
-    firstName: joi.string().min(3).max(10).pattern(new RegExp('^[A-Z]{1}[a-z]{2,}$')),
+    firstName: joi.string().pattern(new RegExp('^[A-Z]{1}[a-z]{2,}$')),
     lastName: joi.string().pattern(new RegExp('^[A-Z]{1}[a-z]{2,}$')),
     email: joi.string().email().pattern(new RegExp('^[a-z0-9](.?[a-z0-9]){5,}@g(oogle)?mail.com$')),
     password: joi.string().pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()]{1}).{8,}$')),

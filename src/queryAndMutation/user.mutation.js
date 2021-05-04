@@ -147,7 +147,7 @@ class Mutation {
           response.success = true;
           response.message = 'Token send to the registered email id';
           response.token = jwtGenerator(payload);
-          sendMail(response.token, user.email);
+          await sendMail(response.token, user.email);
           return response;
         }
       } catch (error) {
@@ -177,7 +177,7 @@ class Mutation {
         type: new GraphQLNonNull(GraphQLString),
       },
     },
-    resolve: async (root, args, context) => {
+    resolve: async (_, args, context) => {
       let response = {};
       const verifiedUser = await checkAuth(context);
       let result = validationSchema.validate(args);
