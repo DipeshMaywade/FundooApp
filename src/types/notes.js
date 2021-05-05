@@ -1,3 +1,4 @@
+/* eslint-disable no-return-await */
 const { GraphQLObjectType, GraphQLString, GraphQLID } = require('graphql');
 const { userType } = require('./user');
 const { userRegistration } = require('../models/user');
@@ -11,9 +12,7 @@ const notesType = new GraphQLObjectType({
     notes: { type: GraphQLString },
     userDetails: {
       type: userType,
-      resolve: async (root) => {
-        return await userRegistration.findById(root.userId);
-      },
+      resolve: async (root) => await userRegistration.findById(root.userId),
     },
   }),
 });

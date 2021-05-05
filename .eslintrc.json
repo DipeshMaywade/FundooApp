@@ -1,0 +1,11 @@
+{
+    "extends":["airbnb", "prettier", "plugin:node/recommended"],
+    "plugins": ["prettier"],
+    "parser":"babel-eslint",
+    "rules": {
+        "no-unused-vars":"warn",
+        "no-console":"off",
+        "Parsing error":"off",
+        "new-cap":"off"
+    }
+}

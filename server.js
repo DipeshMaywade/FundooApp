@@ -1,10 +1,14 @@
+/* eslint-disable no-console */
+/* eslint-disable no-undef */
+
 const express = require('express');
-const app = express();
 const { graphqlHTTP } = require('express-graphql');
 const schema = require('./src/queryAndMutation/index');
 const logger = require('./src/utility/logger');
 const { fundooConnection } = require('./config/config');
 require('dotenv').config();
+
+const app = express();
 
 fundooConnection();
 
@@ -14,7 +18,7 @@ const host = process.env.HOST;
 app.use(
   '/graphql',
   graphqlHTTP({
-    schema: schema,
+    schema,
     graphiql: true,
   })
 );
