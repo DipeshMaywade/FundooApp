@@ -1,9 +1,10 @@
 const mongoose = require('mongoose');
+const ObjectId = mongoose.Schema.ObjectId;
 
 const notesSchema = new mongoose.Schema(
   {
     userId: {
-      type: String,
+      type: ObjectId,
       require: true,
     },
     title: {
