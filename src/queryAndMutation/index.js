@@ -1,8 +1,8 @@
 const { GraphQLSchema, GraphQLObjectType } = require('graphql');
-const { addUser, loginUser, forgotPassword, resetPassword } = require('./user.mutation');
-const { addNotes, updateNotes, deleteNote } = require('./notes.mutation');
-const { users } = require('./user.query');
-const { notes } = require('./notes.query');
+const { addUser, loginUser, forgotPassword, resetPassword } = require('./user/user.mutation');
+const { addNotes, updateNotes, deleteNote } = require('./notes/notes.mutation');
+const { notes } = require('./notes/notes.query');
+const { users } = require('./user/user.query');
 
 const query = new GraphQLObjectType({
   name: 'Query',

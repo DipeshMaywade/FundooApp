@@ -1,5 +1,5 @@
-const { userType } = require('../types/user');
-const { userRegistration } = require('../models/user');
+const { userType } = require('../../types/user');
+const { userRegistration } = require('../../models/user');
 const { GraphQLList } = require('graphql');
 
 class Query {

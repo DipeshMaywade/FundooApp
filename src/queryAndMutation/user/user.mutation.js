@@ -1,9 +1,9 @@
 const { GraphQLNonNull, GraphQLString } = require('graphql');
-const { validationSchema, jwtGenerator, sendMail, passEncrypt, comparePassword } = require('../utility/helper');
-const { userRegistration } = require('../models/user');
-const { userType, outputType } = require('../types/user');
-const { checkAuth } = require('../utility/auth');
-const loggers = require('../utility/logger');
+const { validationSchema, jwtGenerator, sendMail, passEncrypt, comparePassword } = require('../../utility/helper');
+const { userRegistration } = require('../../models/user');
+const { userType, outputType } = require('../../types/user');
+const { checkAuth } = require('../../utility/auth');
+const loggers = require('../../utility/logger');
 
 /**user all type of mutation fields are wrapped into the class
  * @class Mutation

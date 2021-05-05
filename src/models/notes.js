@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const notesSchema = new mongoose.Schema(
   {
-    authorId: {
+    userId: {
       type: String,
       require: true,
     },

@@ -1,7 +1,7 @@
-const { notesType } = require('../types/notes');
-const { notes } = require('../models/notes');
+const { notesType } = require('../../types/notes');
+const { notes } = require('../../models/notes');
 const { GraphQLList } = require('graphql');
-const { checkAuth } = require('../utility/auth');
+const { checkAuth } = require('../../utility/auth');
 
 class NotesQuery {
   notes = {

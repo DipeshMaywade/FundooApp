@@ -1,17 +1,18 @@
-const { GraphQLObjectType, GraphQLString } = require('graphql');
+const { GraphQLObjectType, GraphQLString, GraphQLID } = require('graphql');
 const { userType } = require('./user');
 const { userRegistration } = require('../models/user');
 
 const notesType = new GraphQLObjectType({
   name: 'Notes',
   fields: () => ({
-    authorId: { type: GraphQLString },
+    id: { type: GraphQLID },
+    userId: { type: GraphQLString },
     title: { type: GraphQLString },
     notes: { type: GraphQLString },
-    auther: {
+    userDetails: {
       type: userType,
       resolve: async (root) => {
-        return await userRegistration.findById(root.authorId);
+        return await userRegistration.findById(root.userId);
       },
     },
   }),

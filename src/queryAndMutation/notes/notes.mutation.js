@@ -1,8 +1,8 @@
 const { GraphQLNonNull, GraphQLString } = require('graphql');
-const { notes } = require('../models/notes');
-const { notesType } = require('../types/notes');
-const { checkAuth } = require('../utility/auth');
-const loggers = require('../utility/logger');
+const { notes } = require('../../models/notes');
+const { notesType } = require('../../types/notes');
+const { checkAuth } = require('../../utility/auth');
+const loggers = require('../../utility/logger');
 
 class NotesMutation {
   addNotes = {
@@ -22,7 +22,7 @@ class NotesMutation {
           return { title: 'for notes creation please login first' };
         } else {
           let note = {
-            authorId: verifiedUser.payload.id,
+            userId: verifiedUser.payload.id,
             title: args.title,
             notes: args.notes,
           };
@@ -63,7 +63,7 @@ class NotesMutation {
             title: args.title,
             notes: args.notes,
           };
-          let notesUpdate = await notes.findOneAndUpdate({ _id: args.id, authorId: verifiedUser.payload.id }, updatedNote);
+          let notesUpdate = await notes.findOneAndUpdate({ _id: args.id, userId: verifiedUser.payload.id }, updatedNote);
           if (!notesUpdate) {
             loggers.error(`error`, `Note not found`);
             return null;
@@ -90,7 +90,7 @@ class NotesMutation {
         if (!verifiedUser) {
           return { title: 'please login first' };
         } else {
-          let notesUpdate = await notes.findOneAndDelete({ _id: args.id, authorId: verifiedUser.payload.id });
+          let notesUpdate = await notes.findOneAndDelete({ _id: args.id, userId: verifiedUser.payload.id });
           if (!notesUpdate) {
             loggers.error(`error`, `Note not found`);
             return null;
