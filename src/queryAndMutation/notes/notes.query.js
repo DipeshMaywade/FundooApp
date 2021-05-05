@@ -1,8 +1,9 @@
+const { GraphQLList } = require('graphql');
+const { ObjectId } = require('mongodb');
+
 const { notesType } = require('../../types/notes');
 const { notes } = require('../../models/notes');
-const { GraphQLList } = require('graphql');
 const { checkAuth } = require('../../utility/auth');
-const { ObjectId } = require('mongodb');
 const logger = require('../../utility/logger');
 
 class NotesQuery {
@@ -11,7 +12,7 @@ class NotesQuery {
     resolve: async (root, args, context) => {
       try {
         const verifiedUser = await checkAuth(context);
-        const userNotes = await notes.find({ userId: ObjectId(verifiedUser.payload.id) }, function (err, result) {
+        const userNotes = await notes.find({ userId: ObjectId(verifiedUser.payload.id) }, (err, result) => {
           if (!err) return result;
         });
         if (userNotes) {

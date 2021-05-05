@@ -20,4 +20,5 @@ class Connection {
 }
 
 module.exports = new Connection();
-//refactor
+
+// refactor

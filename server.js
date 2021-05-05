@@ -1,6 +1,3 @@
-/* eslint-disable no-console */
-/* eslint-disable no-undef */
-
 const express = require('express');
 const { graphqlHTTP } = require('express-graphql');
 const schema = require('./src/queryAndMutation/index');

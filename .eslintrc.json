@@ -3,9 +3,12 @@
     "plugins": ["prettier"],
     "parser":"babel-eslint",
     "rules": {
-        "no-unused-vars":"warn",
         "no-console":"off",
-        "Parsing error":"off",
-        "new-cap":"off"
+        "new-cap":"off",
+        "prefer-destructuring":"off",
+        "consistent-return":"off",
+        "no-param-reassign":"off",
+        "prefer-const":"off",
+        "no-unused-expressions":"off"
     }
 }

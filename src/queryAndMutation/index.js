@@ -15,6 +15,6 @@ const mutation = new GraphQLObjectType({
 });
 
 module.exports = new GraphQLSchema({
-  query: query,
-  mutation: mutation,
+  query,
+  mutation,
 });

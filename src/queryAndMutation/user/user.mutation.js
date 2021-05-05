@@ -5,7 +5,7 @@ const { userType, outputType } = require('../../types/user');
 const { checkAuth } = require('../../utility/auth');
 const loggers = require('../../utility/logger');
 
-/**user all type of mutation fields are wrapped into the class
+/** user all type of mutation fields are wrapped into the class
  * @class Mutation
  * @property addUser, loginUser, forgetPassword, resetPassword
  * @description class for all the mutation property
@@ -36,7 +36,7 @@ class Mutation {
       },
     },
     resolve: async (root, data) => {
-      let result = validationSchema.validate(data);
+      const result = validationSchema.validate(data);
       if (result.error) {
         return { message: result.error.message };
       }
@@ -73,8 +73,8 @@ class Mutation {
       },
     },
     resolve: async (root, args) => {
-      let response = {};
-      let result = validationSchema.validate(args);
+      const response = {};
+      const result = validationSchema.validate(args);
       if (result.error) {
         return { message: result.error.message };
       }
@@ -91,16 +91,15 @@ class Mutation {
             response.success = false;
             response.message = 'incorrect password.';
             return response;
-          } else {
-            let payload = {
-              id: user.id,
-              email: user.email,
-            };
-            response.success = true;
-            response.message = 'Login successful';
-            response.token = jwtGenerator(payload);
-            return response;
           }
+          let payload = {
+            id: user.id,
+            email: user.email,
+          };
+          response.success = true;
+          response.message = 'Login successful';
+          response.token = jwtGenerator(payload);
+          return response;
         }
       } catch (error) {
         response.success = false;
@@ -139,17 +138,16 @@ class Mutation {
           response.success = false;
           response.message = 'incorrect email user not Found';
           return response;
-        } else {
-          let payload = {
-            id: user.id,
-            email: user.email,
-          };
-          response.success = true;
-          response.message = 'Token send to the registered email id';
-          response.token = jwtGenerator(payload);
-          await sendMail(response.token, user.email);
-          return response;
         }
+        let payload = {
+          id: user.id,
+          email: user.email,
+        };
+        response.success = true;
+        response.message = 'Token send to the registered email id';
+        response.token = jwtGenerator(payload);
+        await sendMail(response.token, user.email);
+        return response;
       } catch (error) {
         response.success = false;
         response.message = error;
@@ -187,13 +185,12 @@ class Mutation {
             response.success = false;
             response.message = 'incorrect token';
             return response;
-          } else {
-            let newpassword = await passEncrypt(args.confirmPassword);
-            await userRegistration.findByIdAndUpdate(verifiedUser.payload.id, { password: newpassword });
-            response.success = true;
-            response.message = 'password updated successfully';
-            return response;
           }
+          let newpassword = await passEncrypt(args.confirmPassword);
+          await userRegistration.findByIdAndUpdate(verifiedUser.payload.id, { password: newpassword });
+          response.success = true;
+          response.message = 'password updated successfully';
+          return response;
         } catch (error) {
           response.success = false;
           response.message = error;

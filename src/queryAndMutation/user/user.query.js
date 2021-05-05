@@ -1,12 +1,12 @@
+const { GraphQLList } = require('graphql');
 const { userType } = require('../../types/user');
 const { userRegistration } = require('../../models/user');
-const { GraphQLList } = require('graphql');
 
 class Query {
   users = {
     type: new GraphQLList(userType),
-    resolve: function () {
-      const users = userRegistration.find().exec();
+    resolve: async () => {
+      const users = await userRegistration.find();
       if (users) {
         return users;
       }
