@@ -24,7 +24,7 @@ class labelMutation {
           };
           const labelModel = new labels(label);
           const newlabel = await labelModel.save();
-          return !newlabel ? { label: 'failed to save note' } : newlabel;
+          return !newlabel ? { label: 'failed to save label' } : newlabel;
         }
       } catch (error) {
         loggers.error(`error`, error);
@@ -33,42 +33,36 @@ class labelMutation {
     },
   };
 
-  //   updateNotes = {
-  //     type: notesType,
-  //     args: {
-  //       id: {
-  //         type: new GraphQLNonNull(GraphQLString),
-  //       },
-  //       title: {
-  //         type: new GraphQLNonNull(GraphQLString),
-  //       },
-  //       notes: {
-  //         type: new GraphQLNonNull(GraphQLString),
-  //       },
-  //     },
-  //     resolve: async (root, args, context) => {
-  //       const verifiedUser = await checkAuth(context);
-  //       try {
-  //         if (!verifiedUser) {
-  //           return { title: 'please login first' };
-  //         } else {
-  //           const updatedNote = {
-  //             title: args.title,
-  //             notes: args.notes,
-  //           };
-  //           const notesUpdate = await notes.findOneAndUpdate({ _id: args.id, userId: verifiedUser.payload.id }, updatedNote);
-  //           if (!notesUpdate) {
-  //             loggers.error(`error`, `Note not found`);
-  //             return null;
-  //           }
-  //           return notesUpdate;
-  //         }
-  //       } catch (error) {
-  //         loggers.error(`error`, error);
-  //         return { title: error };
-  //       }
-  //     },
-  //   };
+  updateLabel = {
+    type: labelType,
+    args: {
+      id: {
+        type: new GraphQLNonNull(GraphQLString),
+      },
+      newLabel: {
+        type: new GraphQLNonNull(GraphQLString),
+      },
+    },
+    resolve: async (root, args, context) => {
+      const verifiedUser = await checkAuth(context);
+      try {
+        if (!verifiedUser) {
+          return { title: 'please login first' };
+        } else {
+          const updatedLabel = {
+            label: args.newLabel,
+          };
+          const labelUpdate = await labels.findOneAndUpdate({ _id: args.id, userId: verifiedUser.payload.id }, updatedLabel, (err, result) => {
+            return err ? { label: 'failed to update label' } : result;
+          });
+          return !labelUpdate ? { label: 'failed to update label' } : labelUpdate;
+        }
+      } catch (error) {
+        loggers.error(`error`, error);
+        return { label: error };
+      }
+    },
+  };
 
   //   deleteNote = {
   //     type: notesType,
