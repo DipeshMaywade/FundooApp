@@ -38,19 +38,19 @@ class Mutation {
     resolve: async (root, data) => {
       const result = validationSchema.validate(data);
       if (result.error) {
-        return { message: result.error.message };
+        return { firstName: result.error.message };
       }
       try {
         data.password = await passEncrypt(data.password);
         const userModel = new userRegistration(data);
         const newUser = userModel.save();
         if (!newUser) {
-          return { message: 'failed to save' };
+          return { firstName: 'failed to save' };
         }
         return newUser;
       } catch (error) {
         loggers.error(`error`, error);
-        return { message: error };
+        return { firstName: error };
       }
     },
   };
@@ -186,8 +186,8 @@ class Mutation {
             response.message = 'incorrect token';
             return response;
           }
-          let newpassword = await passEncrypt(args.confirmPassword);
-          await userRegistration.findByIdAndUpdate(verifiedUser.payload.id, { password: newpassword });
+          let newPassword = await passEncrypt(args.confirmPassword);
+          await userRegistration.findByIdAndUpdate(verifiedUser.payload.id, { password: newPassword });
           response.success = true;
           response.message = 'password updated successfully';
           return response;

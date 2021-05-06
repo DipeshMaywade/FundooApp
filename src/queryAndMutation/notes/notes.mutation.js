@@ -91,7 +91,10 @@ class NotesMutation {
         if (!verifiedUser) {
           return { title: 'please login first' };
         } else {
-          const notesUpdate = await notes.findOneAndDelete({ _id: args.id, userId: verifiedUser.payload.id });
+          const notesUpdate = await notes.findOneAndDelete({ _id: args.id, userId: verifiedUser.payload.id }, (err, result) => {
+            if (err) return { title: err };
+            return result;
+          });
           if (!notesUpdate) {
             loggers.error(`error`, `Note not found`);
             return null;

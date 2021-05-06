@@ -1,14 +1,15 @@
-{
-    "extends":["airbnb", "prettier", "plugin:node/recommended"],
-    "plugins": ["prettier"],
-    "parser":"babel-eslint",
-    "rules": {
-        "no-console":"off",
-        "new-cap":"off",
-        "prefer-destructuring":"off",
-        "consistent-return":"off",
-        "no-param-reassign":"off",
-        "prefer-const":"off",
-        "no-unused-expressions":"off"
-    }
-}
+// {
+//     "extends":["airbnb", "prettier", "plugin:node/recommended"],
+//     "plugins": ["prettier"],
+//     "parser":"babel-eslint",
+//     "rules": {
+        
+//         "no-console":"off",
+//         "new-cap":"off",
+//         "prefer-destructuring":"off",
+//         "consistent-return":"off",
+//         "no-param-reassign":"off",
+//         "prefer-const":"off",
+//         "no-unused-expressions":"off"
+//     }
+// }

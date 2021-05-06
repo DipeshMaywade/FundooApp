@@ -2,12 +2,12 @@ const express = require('express');
 const { graphqlHTTP } = require('express-graphql');
 const schema = require('./src/queryAndMutation/index');
 const logger = require('./src/utility/logger');
-const { fundooConnection } = require('./config/config');
+const { kuchBhi } = require('./config/config2');
 require('dotenv').config();
 
 const app = express();
 
-fundooConnection();
+kuchBhi();
 
 const port = process.env.PORT;
 const host = process.env.HOST;

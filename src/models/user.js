@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 
+const ObjectId = mongoose.Schema.ObjectId;
+
 const registration = new mongoose.Schema(
   {
     firstName: {
