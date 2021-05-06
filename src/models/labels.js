@@ -1,17 +1,13 @@
 const mongoose = require('mongoose');
 
-const notesSchema = new mongoose.Schema(
+const labelSchema = new mongoose.Schema(
   {
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'userRegistration',
       require: true,
     },
-    title: {
-      type: String,
-      require: true,
-    },
-    notes: {
+    label: {
       type: String,
       require: true,
     },
@@ -19,6 +15,6 @@ const notesSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const notes = mongoose.model('notes', notesSchema);
+const labels = mongoose.model('labels', labelSchema);
 
-module.exports = { notes };
+module.exports = { labels };

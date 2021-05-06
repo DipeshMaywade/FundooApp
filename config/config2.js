@@ -17,7 +17,7 @@ let kuchBhi = () => {
   mongoose.connect(fundooConnection.uri, fundooConnection.options);
   mongoose.connection
     .once('open', () => {
-      console.log('conneted');
+      console.log('connected');
     })
     .on('error', (error) => {
       console.log(`Error is: ${error}`);
