@@ -16,8 +16,10 @@ class Authentication {
         }
       }
       loggers.error(`error`, `wrong Header forment`);
+      return null;
     }
     loggers.error(`error`, `header must be provided`);
+    return null;
   };
 }
 module.exports = new Authentication();

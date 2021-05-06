@@ -1,11 +1,11 @@
-const { GraphQLNonNull, GraphQLString } = require('graphql');
+const { GraphQLNonNull, GraphQLString, GraphQLID } = require('graphql');
 const { labels } = require('../../models/labels');
 const { labelType } = require('../../types/labels');
 const { checkAuth } = require('../../utility/auth');
 const loggers = require('../../utility/logger');
 
 class labelMutation {
-  addLabel = {
+  createLabel = {
     type: labelType,
     args: {
       label: {
@@ -33,7 +33,7 @@ class labelMutation {
     },
   };
 
-  updateLabel = {
+  updateLabelName = {
     type: labelType,
     args: {
       id: {
@@ -47,7 +47,7 @@ class labelMutation {
       const verifiedUser = await checkAuth(context);
       try {
         if (!verifiedUser) {
-          return { title: 'please login first' };
+          return { label: 'please login first' };
         } else {
           const updatedLabel = {
             label: args.newLabel,
@@ -64,35 +64,28 @@ class labelMutation {
     },
   };
 
-  //   deleteNote = {
-  //     type: notesType,
-  //     args: {
-  //       id: {
-  //         type: new GraphQLNonNull(GraphQLString),
-  //       },
-  //     },
-  //     resolve: async (root, args, context) => {
-  //       const verifiedUser = await checkAuth(context);
-  //       try {
-  //         if (!verifiedUser) {
-  //           return { title: 'please login first' };
-  //         } else {
-  //           const notesUpdate = await notes.findOneAndDelete({ _id: args.id, userId: verifiedUser.payload.id }, (err, result) => {
-  //             if (err) return { title: err };
-  //             return result;
-  //           });
-  //           if (!notesUpdate) {
-  //             loggers.error(`error`, `Note not found`);
-  //             return null;
-  //           }
-  //           return { title: 'Note successfully deleted' };
-  //         }
-  //       } catch (error) {
-  //         loggers.error(`error`, error);
-  //         return { title: error };
-  //       }
-  //     },
-  //   };
+  deleteLabel = {
+    type: labelType,
+    args: {
+      id: {
+        type: new GraphQLNonNull(GraphQLID),
+      },
+    },
+    resolve: async (root, args, context) => {
+      const verifiedUser = await checkAuth(context);
+      try {
+        if (!verifiedUser) {
+          return { label: 'please login first' };
+        } else {
+          const labelDelete = await labels.findOneAndDelete({ _id: args.id, userId: verifiedUser.payload.id });
+          return !labelDelete ? { label: 'label note found' } : { label: 'label successfully deleted' };
+        }
+      } catch (error) {
+        loggers.error(`error`, error);
+        return { label: error };
+      }
+    },
+  };
 }
 
 module.exports = new labelMutation();
