@@ -19,7 +19,6 @@ class labelMutation {
           return { label: 'please login first' };
         } else {
           const label = {
-            userId: verifiedUser.payload.id,
             label: args.label,
           };
           const labelModel = new labels(label);
@@ -52,7 +51,7 @@ class labelMutation {
           const updatedLabel = {
             label: args.newLabel,
           };
-          const labelUpdate = await labels.findOneAndUpdate({ _id: args.id, userId: verifiedUser.payload.id }, updatedLabel, (err, result) => {
+          const labelUpdate = await labels.findOneAndUpdate({ _id: args.id }, updatedLabel, (err, result) => {
             return err ? { label: 'failed to update label' } : result;
           });
           return !labelUpdate ? { label: 'failed to update label' } : labelUpdate;
@@ -77,7 +76,7 @@ class labelMutation {
         if (!verifiedUser) {
           return { label: 'please login first' };
         } else {
-          const labelDelete = await labels.findOneAndDelete({ _id: args.id, userId: verifiedUser.payload.id });
+          const labelDelete = await labels.findOneAndDelete({ _id: args.id });
           return !labelDelete ? { label: 'label note found' } : { label: 'label successfully deleted' };
         }
       } catch (error) {

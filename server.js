@@ -2,12 +2,17 @@ const express = require('express');
 const { graphqlHTTP } = require('express-graphql');
 const schema = require('./src/queryAndMutation/index');
 const logger = require('./src/utility/logger');
-const { kuchBhi } = require('./config/config2');
+const MongoDBAdapter = require('./config/config2');
 require('dotenv').config();
 
-const app = express();
+new MongoDBAdapter(process.env.DB_URL, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useCreateIndex: true,
+  useFindAndModify: false,
+});
 
-kuchBhi();
+const app = express();
 
 const port = process.env.PORT;
 const host = process.env.HOST;

@@ -11,7 +11,7 @@ class Connection {
     });
     mongoose.connection
       .once('open', () => {
-        console.log('conneted');
+        console.log('connected');
       })
       .on('error', (error) => {
         console.log(`Error is: ${error}`);
