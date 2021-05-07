@@ -2,15 +2,17 @@ const express = require('express');
 const { graphqlHTTP } = require('express-graphql');
 const schema = require('./src/queryAndMutation/index');
 const logger = require('./src/utility/logger');
-const MongoDBAdapter = require('./config/config2');
+// const MongoDBAdapter = require('./config/config2');
+const { fundooConnection } = require('./config/config');
 require('dotenv').config();
 
-new MongoDBAdapter(process.env.DB_URL, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useCreateIndex: true,
-  useFindAndModify: false,
-});
+// new MongoDBAdapter(process.env.DB_URL, {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true,
+//   useCreateIndex: true,
+//   useFindAndModify: false,
+// });
+fundooConnection();
 
 const app = express();
 
