@@ -22,6 +22,7 @@ class labelMutation {
         } else {
           const label = {
             label: args.label,
+            userId: verifiedUser.payload.id,
           };
           const labelModel = new labels(label);
           const newlabel = await labelModel.save();

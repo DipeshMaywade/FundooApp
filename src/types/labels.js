@@ -4,7 +4,7 @@ const labelType = new GraphQLObjectType({
   name: 'Labels',
   fields: () => ({
     id: { type: GraphQLID },
-    userId: { type: GraphQLString },
+    userId: { type: GraphQLID },
     label: { type: GraphQLString },
   }),
 });
