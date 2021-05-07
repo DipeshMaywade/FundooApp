@@ -6,7 +6,7 @@ const { checkAuth } = require('../../utility/auth');
 const logger = require('../../utility/logger');
 
 class NotesQuery {
-  notes = {
+  allNotes = {
     type: new GraphQLList(notesType),
     resolve: async (root, args, context) => {
       try {
@@ -15,9 +15,8 @@ class NotesQuery {
           return [{ title: 'Please Login First' }];
         }
         const userNotes = await notes.find({ userId: ObjectId(verifiedUser.payload.id) });
-        if (userNotes) {
-          return userNotes;
-        }
+        if (userNotes) return userNotes;
+        return [{ title: 'notes are not created' }];
       } catch (error) {
         logger.error('error', error);
       }

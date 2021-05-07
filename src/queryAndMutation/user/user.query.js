@@ -9,9 +9,7 @@ class Query {
     type: new GraphQLList(userType),
     resolve: async () => {
       const users = await userRegistration.find();
-      if (users) {
-        return users;
-      }
+      return users ? users : [{ firstName: 'No users Found' }];
     },
   };
 
@@ -19,11 +17,9 @@ class Query {
     type: new GraphQLList(userType),
     resolve: async (root, args, context) => {
       let verifiedUser = await checkAuth(context);
-      console.log(verifiedUser);
+      if (!verifiedUser) return [{ firstName: 'please login first' }];
       const users = await userRegistration.find({ _id: ObjectId(verifiedUser.payload.id) });
-      if (users) {
-        return users;
-      }
+      return users ? users : [{ firstName: 'No users Found' }];
     },
   };
 }

@@ -29,10 +29,7 @@ class NotesMutation {
           };
           const notesModel = new notes(note);
           const newNotes = await notesModel.save();
-          if (!newNotes) {
-            return { message: 'failed to save note' };
-          }
-          return newNotes;
+          return !newNotes ? { message: 'failed to save note' } : newNotes;
         }
       } catch (error) {
         loggers.error(`error`, error);
@@ -65,11 +62,7 @@ class NotesMutation {
             notes: args.notes,
           };
           const notesUpdate = await notes.findOneAndUpdate({ _id: args.id, userId: verifiedUser.payload.id }, updatedNote);
-          if (!notesUpdate) {
-            loggers.error(`error`, `Note not found`);
-            return null;
-          }
-          return notesUpdate;
+          return !notesUpdate ? { title: 'failed to update' } : notesUpdate;
         }
       } catch (error) {
         loggers.error(`error`, error);
@@ -96,7 +89,6 @@ class NotesMutation {
         }
       } catch (error) {
         loggers.error(`error`, error);
-        return { title: error };
       }
     },
   };
