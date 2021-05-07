@@ -9,13 +9,7 @@ const notesType = new GraphQLObjectType({
     userId: { type: GraphQLString },
     title: { type: GraphQLString },
     notes: { type: GraphQLString },
-    label: {
-      type: GraphQLList(labelType),
-      resolve: async (root) => {
-        let label = await labels.find({ userId: root.userId });
-        return label;
-      },
-    },
+    labelId: { type: GraphQLList(GraphQLString) },
   }),
 });
 

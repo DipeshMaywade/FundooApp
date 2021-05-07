@@ -7,11 +7,12 @@ const notesSchema = new mongoose.Schema(
       ref: 'userRegistration',
       require: true,
     },
-    labelId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'labels',
-      default: null,
-    },
+    labelId: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'labels',
+      },
+    ],
     title: {
       type: String,
       require: true,

@@ -1,7 +1,6 @@
 const { GraphQLObjectType, GraphQLString, GraphQLList } = require('graphql');
 const { notes } = require('../models/notes');
 const { notesType } = require('./notes');
-const jwt = require('jsonwebtoken');
 const { labels } = require('../models/labels');
 const { labelType } = require('./labels');
 

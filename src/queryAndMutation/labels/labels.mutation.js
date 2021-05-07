@@ -95,6 +95,9 @@ class labelMutation {
       labelId: {
         type: new GraphQLNonNull(GraphQLID),
       },
+      noteId: {
+        type: new GraphQLNonNull(GraphQLID),
+      },
     },
     resolve: async (root, args, context) => {
       const verifiedUser = await checkAuth(context);
@@ -102,11 +105,22 @@ class labelMutation {
         if (!verifiedUser) {
           return { title: 'please login first' };
         } else {
-          const notesUpdate = await notes.findOneAndUpdate({ _id: args.id, userId: verifiedUser.payload.id }, updatedNote);
-          if (!notesUpdate) {
-            loggers.error(`error`, `Note not found`);
-            return null;
-          }
+          // console.log('hiii up');
+          // const notesUpdate = await notes.findByIdAndUpdate(args.noteId, {
+          //   $push: {
+          //     labelId: args.labelId,
+          //   },
+          // });
+
+          const notesUpdate = await notes.findByIdAndUpdate(
+            args.noteId,
+            { $push: { labelId: args.labelId } },
+            { new: true, upsert: true },
+            function (err, managerparent) {
+              if (err) throw err;
+              return managerparent;
+            }
+          );
           return notesUpdate;
         }
       } catch (error) {
