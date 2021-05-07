@@ -87,4 +87,4 @@ MongoDBAdapter.prototype.disconnect = function () {
   );
 };
 
-module.exports = MongoDBAdapter;
+module.exports = { MongoDBAdapter };

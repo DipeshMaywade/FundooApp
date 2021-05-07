@@ -1,6 +1,8 @@
 const { GraphQLNonNull, GraphQLString, GraphQLID } = require('graphql');
 const { labels } = require('../../models/labels');
+const { notes } = require('../../models/notes');
 const { labelType } = require('../../types/labels');
+const { notesType } = require('../../types/notes');
 const { checkAuth } = require('../../utility/auth');
 const loggers = require('../../utility/logger');
 
@@ -78,6 +80,33 @@ class labelMutation {
         } else {
           const labelDelete = await labels.findOneAndDelete({ _id: args.id });
           return !labelDelete ? { label: 'label note found' } : { label: 'label successfully deleted' };
+        }
+      } catch (error) {
+        loggers.error(`error`, error);
+        return { label: error };
+      }
+    },
+  };
+
+  addLabelOnNotes = {
+    type: notesType,
+    args: {
+      labelId: {
+        type: new GraphQLNonNull(GraphQLID),
+      },
+    },
+    resolve: async (root, args, context) => {
+      const verifiedUser = await checkAuth(context);
+      try {
+        if (!verifiedUser) {
+          return { title: 'please login first' };
+        } else {
+          const notesUpdate = await notes.findOneAndUpdate({ _id: args.id, userId: verifiedUser.payload.id }, updatedNote);
+          if (!notesUpdate) {
+            loggers.error(`error`, `Note not found`);
+            return null;
+          }
+          return notesUpdate;
         }
       } catch (error) {
         loggers.error(`error`, error);

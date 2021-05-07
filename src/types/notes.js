@@ -1,4 +1,6 @@
-const { GraphQLObjectType, GraphQLString, GraphQLID } = require('graphql');
+const { GraphQLObjectType, GraphQLString, GraphQLID, GraphQLList } = require('graphql');
+const { notes } = require('../models/notes');
+const { labelType } = require('./labels');
 
 const notesType = new GraphQLObjectType({
   name: 'Notes',
@@ -7,6 +9,13 @@ const notesType = new GraphQLObjectType({
     userId: { type: GraphQLString },
     title: { type: GraphQLString },
     notes: { type: GraphQLString },
+    label: {
+      type: GraphQLList(labelType),
+      resolve: async (root) => {
+        let label = await notes.find({ userId: root._id });
+        return label;
+      },
+    },
   }),
 });
 

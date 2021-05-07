@@ -27,14 +27,6 @@ const outputType = new GraphQLObjectType({
     success: { type: GraphQLString },
     message: { type: GraphQLString },
     token: { type: GraphQLString },
-    notes: {
-      type: GraphQLList(notesType),
-      resolve: async (root) => {
-        const verifiedUser = await jwt.decode(root.token);
-        let note = await notes.find({ userId: verifiedUser.payload.id });
-        return note;
-      },
-    },
   }),
 });
 

@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 const labelSchema = new mongoose.Schema(
   {
-    notesId: {
+    userId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'notes',
+      ref: 'userRegistration',
     },
     label: {
       type: String,
