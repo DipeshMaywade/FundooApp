@@ -105,17 +105,44 @@ class labelMutation {
         if (!verifiedUser) {
           return { title: 'please login first' };
         } else {
-          // console.log('hiii up');
-          // const notesUpdate = await notes.findByIdAndUpdate(args.noteId, {
-          //   $push: {
-          //     labelId: args.labelId,
-          //   },
-          // });
-
           const notesUpdate = await notes.findByIdAndUpdate(
             args.noteId,
             { $push: { labelId: args.labelId } },
             { new: true, upsert: true },
+            function (err, managerparent) {
+              if (err) throw err;
+              return managerparent;
+            }
+          );
+          return notesUpdate;
+        }
+      } catch (error) {
+        loggers.error(`error`, error);
+        return { label: error };
+      }
+    },
+  };
+
+  removeLabelOnNotes = {
+    type: notesType,
+    args: {
+      labelId: {
+        type: new GraphQLNonNull(GraphQLID),
+      },
+      noteId: {
+        type: new GraphQLNonNull(GraphQLID),
+      },
+    },
+    resolve: async (root, args, context) => {
+      const verifiedUser = await checkAuth(context);
+      try {
+        if (!verifiedUser) {
+          return { title: 'please login first' };
+        } else {
+          const notesUpdate = await notes.findByIdAndUpdate(
+            args.noteId,
+            { $pull: { labelId: args.labelId } },
+            { new: true },
             function (err, managerparent) {
               if (err) throw err;
               return managerparent;

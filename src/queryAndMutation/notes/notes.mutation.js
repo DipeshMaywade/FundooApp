@@ -1,4 +1,3 @@
-/* eslint-disable no-else-return */
 const { GraphQLNonNull, GraphQLString } = require('graphql');
 const { notes } = require('../../models/notes');
 const { notesType } = require('../../types/notes');
