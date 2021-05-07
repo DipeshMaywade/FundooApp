@@ -6,7 +6,7 @@ const { checkAuth } = require('../../utility/auth');
 const logger = require('../../utility/logger');
 
 class NotesQuery {
-  allNotes = {
+  getNotes = {
     type: new GraphQLList(notesType),
     resolve: async (root, args, context) => {
       try {
