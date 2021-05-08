@@ -2,12 +2,8 @@ const express = require('express');
 const { graphqlHTTP } = require('express-graphql');
 const schema = require('./src/queryAndMutation/index');
 const logger = require('./src/utility/logger');
-//const { MongoDBAdapter } = require('./config/config2');
-const { fundooConnection } = require('./config/config');
+const MongoDBAdapter = require('./config/config2');
 require('dotenv').config();
-
-fundooConnection();
-
 const app = express();
 
 const port = process.env.PORT;
@@ -22,12 +18,15 @@ app.use(
 );
 
 app.listen(port, async () => {
-  // await MongoDBAdapter(process.env.DB_URL, {
-  //   useNewUrlParser: true,
-  //   useUnifiedTopology: true,
-  //   useCreateIndex: true,
-  //   useFindAndModify: false,
-  // });
+  var db = new MongoDBAdapter(process.env.DB_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false,
+  });
+  await db.connect().then(function (uri) {
+    console.log('Connected to ' + uri);
+  });
   logger.log(`info`, `Server Runing at http://${host}:${port}`);
   console.log(`info`, `Server Runing at http://${host}:${port}`);
 });
