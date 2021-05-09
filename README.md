@@ -24,9 +24,9 @@
 >
 > Install given npm packages which is required using "npm install" command.
 
-### Step3:
-
-setup .env file according to sample file and run project using "npm start" command.
+> ### Step3:
+>
+> setup .env file according to sample file and run project using "npm start" command.
 
 ## **Prerequisites**
 

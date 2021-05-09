@@ -24,9 +24,16 @@ app.listen(port, async () => {
     useCreateIndex: true,
     useFindAndModify: false,
   });
-  await db.connect().then(function (uri) {
-    console.log('Connected to ' + uri);
-  });
+  await db
+    .connect()
+    .then((uri) => {
+      console.log('Connected to ' + uri);
+    })
+    .catch((uri) => {
+      db.disconnect();
+      console.log('Disconnected from ' + uri);
+    });
+
   logger.log(`info`, `Server Runing at http://${host}:${port}`);
   console.log(`info`, `Server Runing at http://${host}:${port}`);
 });
