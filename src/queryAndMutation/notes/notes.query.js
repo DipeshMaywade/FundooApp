@@ -7,6 +7,23 @@ const logger = require('../../utility/logger');
 const redis = require('../../utility/redis');
 
 class NotesQuery {
+  // getNotes = {
+  //   type: new GraphQLList(notesType),
+  //   resolve: async (root, args, context) => {
+  //     try {
+  //       const verifiedUser = await checkAuth(context);
+  //       if (!verifiedUser) {
+  //         return [{ title: 'Please Login First' }];
+  //       }
+  //       const userNotes = await notes.find({ userId: ObjectId(verifiedUser.payload.id) });
+  //       if (userNotes) return userNotes;
+  //       return [{ title: 'notes are not created' }];
+  //     } catch (error) {
+  //       logger.error('error', error);
+  //     }
+  //   },
+  // };
+
   getNotes = {
     type: new GraphQLList(notesType),
     resolve: async (root, args, context) => {
@@ -16,7 +33,7 @@ class NotesQuery {
       }
       let KEY = verifiedUser.payload.id;
       console.log(KEY);
-      redis.getData(KEY, (err, data) => {
+      let result = await redis.getData(KEY, (err, data) => {
         if (err) {
           return [{ title: 'error from redis', err }];
         } else if (!data) {
@@ -26,59 +43,21 @@ class NotesQuery {
             } else {
               redis.setData(KEY, noteResult);
               console.log('comming from mongodb');
+              console.log(noteResult);
               return noteResult;
             }
           });
         } else {
           console.log('comming from redis');
+          console.log(data);
           return data;
         }
       });
+      console.log('result');
+      console.log(result);
+      return result;
     },
   };
 }
 
 module.exports = new NotesQuery();
-
-retrieveAllNotes = (userId, callback) => {
-  logger.info(`TRACKED_PATH: Inside services`);
-  const KEY = `NOTE_${userId}`;
-  helper.getResponseFromRedis(KEY, (error, dataFromRedis) => {
-    if (error) {
-      error = {
-        success: false,
-        statusCode: resposnsCode.INTERNAL_SERVER_ERROR,
-        message: error,
-      };
-      callback(error, null);
-    } else if (!dataFromRedis) {
-      noteModel.getAllNotes(userId, (error, noteResult) => {
-        error
-          ? ((error = {
-              success: false,
-              statusCode: resposnsCode.INTERNAL_SERVER_ERROR,
-              message: error,
-            }),
-            callback(error, null))
-          : (helper.setDataToRedis(KEY, noteResult),
-            console.log('comming from mongodb'),
-            (noteResult = {
-              success: true,
-              statusCode: resposnsCode.SUCCESS,
-              message: 'Notes of current account has been retrieved',
-              data: noteResult,
-            }),
-            callback(null, noteResult));
-      });
-    } else {
-      console.log('comming from redis');
-      dataFromRedis = {
-        success: true,
-        statusCode: resposnsCode.SUCCESS,
-        message: 'Notes of current account has been retrieved',
-        data: dataFromRedis,
-      };
-      callback(null, dataFromRedis);
-    }
-  });
-};
