@@ -1,3 +1,13 @@
+/**
+ * @module        config
+ * @file          config.js
+ * @description   Returns a promise that gets resolved when successfully connected 
+ *                to MongoDB URL otherwise return error message
+ * @requires      {@link http://mongoosejs.com/|mongoose}
+ * @requires      bluebird for mongoose globel promise
+ * @author        Dipesh Maywade <dipeshmaywade@gmail.com>
+----------------------------------------------------------------------------------------------------*/
+
 var blueBird = require('bluebird');
 var mongoose = require('mongoose');
 require('dotenv').config();
@@ -31,6 +41,10 @@ MongoDBAdapter.prototype.addConnectionListener = function (event, cb) {
   }
 };
 
+/**
+ * @description Returns a promise that gets resolved when successfully connected to MongoDB URI
+ * @returns {Promise} Returns promise
+ */
 MongoDBAdapter.prototype.connect = function () {
   return new blueBird(
     function (resolve, reject) {
@@ -59,6 +73,10 @@ MongoDBAdapter.prototype.connect = function () {
   );
 };
 
+/**
+ * @description Returns a promise that gets resolved when successfully disconnected to MongoDB URI
+ * @returns {Promise} Returns promise
+ */
 MongoDBAdapter.prototype.disconnect = function () {
   return new blueBird(
     function (resolve, reject) {
