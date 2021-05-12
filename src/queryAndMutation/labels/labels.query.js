@@ -1,10 +1,9 @@
 const { GraphQLList } = require('graphql');
 const { ObjectId } = require('mongodb');
 const { checkAuth } = require('../../utility/auth');
-const logger = require('../../utility/logger');
 const { labelType } = require('../../types/labels');
 const { labels } = require('../../models/labels');
-const redis = require('../../utility/redis');
+const { getData, setData } = require('../../utility/redis');
 
 class LabelQuery {
   getLabels = {
@@ -15,10 +14,10 @@ class LabelQuery {
         return [{ title: 'Please Login First' }];
       }
       let KEY = `label_${verifiedUser.payload.id}`;
-      let result = await redis.getData(KEY);
+      let result = await getData(KEY);
       if (!result) {
         let noteResult = await labels.find({ userId: ObjectId(verifiedUser.payload.id) });
-        await redis.setData(KEY, noteResult);
+        await setData(KEY, noteResult);
         console.log('comming from mongodb');
         return noteResult;
       } else {
