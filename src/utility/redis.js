@@ -4,7 +4,7 @@ const { promisify } = require('util');
 
 class Redis {
   setData = (KEY, data) => {
-    client.setex(KEY, 2000, JSON.stringify(data));
+    client.setex(KEY, 200, JSON.stringify(data));
   };
 
   getData = async (KEY) => {

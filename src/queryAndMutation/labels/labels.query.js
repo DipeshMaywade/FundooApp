@@ -4,21 +4,26 @@ const { checkAuth } = require('../../utility/auth');
 const logger = require('../../utility/logger');
 const { labelType } = require('../../types/labels');
 const { labels } = require('../../models/labels');
+const redis = require('../../utility/redis');
 
 class LabelQuery {
   getLabels = {
     type: new GraphQLList(labelType),
     resolve: async (root, args, context) => {
-      try {
-        const verifiedUser = await checkAuth(context);
-        if (!verifiedUser) {
-          return [{ label: 'Please Login First' }];
-        }
-        const userLabel = await labels.find({ userId: ObjectId(verifiedUser.payload.id) });
-        if (userLabel) return userLabel;
-        return [{ label: 'notes are not created' }];
-      } catch (error) {
-        logger.error('error', error);
+      const verifiedUser = await checkAuth(context);
+      if (!verifiedUser) {
+        return [{ title: 'Please Login First' }];
+      }
+      let KEY = `label_${verifiedUser.payload.id}`;
+      let result = await redis.getData(KEY);
+      if (!result) {
+        let noteResult = await labels.find({ userId: ObjectId(verifiedUser.payload.id) });
+        await redis.setData(KEY, noteResult);
+        console.log('comming from mongodb');
+        return noteResult;
+      } else {
+        console.log('comming from redis');
+        return result;
       }
     },
   };
