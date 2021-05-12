@@ -33,29 +33,17 @@ class NotesQuery {
       }
       let KEY = verifiedUser.payload.id;
       console.log(KEY);
-      await redis.getData(KEY, (err, data) => {
-        if (err) {
-          return [{ title: 'error from redis', err }];
-        } else if (!data) {
-          notes.find({ userId: ObjectId(verifiedUser.payload.id) }, (error, noteResult) => {
-            if (error) {
-              return [{ title: 'notes not found' }];
-            } else {
-              redis.setData(KEY, noteResult);
-              console.log('comming from mongodb');
-              console.log(noteResult);
-              return noteResult;
-            }
-          });
-        } else {
-          console.log('comming from redis');
-          console.log(data);
-          return data;
-        }
-      });
-      console.log('result');
-      console.log(result);
-      return result;
+
+      let result = await redis.getData(KEY);
+      if (!result) {
+        let noteResult = await notes.find({ userId: ObjectId(verifiedUser.payload.id) });
+        await redis.setData(KEY, noteResult);
+        console.log('comming from mongodb');
+        return noteResult;
+      } else {
+        console.log('comming from redis');
+        return result;
+      }
     },
   };
 }
