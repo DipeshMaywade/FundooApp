@@ -4,7 +4,7 @@ const logger = require('./logger');
 
 class Redis {
   setData = (KEY, data) => {
-    client.setex(KEY, 120, JSON.stringify(data));
+    client.setex(KEY, 200, JSON.stringify(data));
   };
 
   getData = (KEY, callback) => {

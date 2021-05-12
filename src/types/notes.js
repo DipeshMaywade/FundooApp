@@ -9,6 +9,7 @@ const notesType = new GraphQLObjectType({
     userId: { type: GraphQLString },
     title: { type: GraphQLString },
     notes: { type: GraphQLString },
+    //desc
     labelId: { type: GraphQLList(GraphQLString) },
   }),
 });

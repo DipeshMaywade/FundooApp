@@ -33,7 +33,7 @@ class NotesQuery {
       }
       let KEY = verifiedUser.payload.id;
       console.log(KEY);
-      let result = await redis.getData(KEY, (err, data) => {
+      await redis.getData(KEY, (err, data) => {
         if (err) {
           return [{ title: 'error from redis', err }];
         } else if (!data) {

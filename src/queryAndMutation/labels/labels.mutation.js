@@ -105,15 +105,7 @@ class labelMutation {
         if (!verifiedUser) {
           return { title: 'please login first' };
         } else {
-          const notesUpdate = await notes.findByIdAndUpdate(
-            args.noteId,
-            { $push: { labelId: args.labelId } },
-            { new: true, upsert: true },
-            function (err, managerparent) {
-              if (err) throw err;
-              return managerparent;
-            }
-          );
+          const notesUpdate = await notes.findByIdAndUpdate(args.noteId, { $push: { labelId: args.labelId } }, { new: true, upsert: true });
           return notesUpdate;
         }
       } catch (error) {
@@ -139,15 +131,7 @@ class labelMutation {
         if (!verifiedUser) {
           return { title: 'please login first' };
         } else {
-          const notesUpdate = await notes.findByIdAndUpdate(
-            args.noteId,
-            { $pull: { labelId: args.labelId } },
-            { new: true },
-            function (err, managerparent) {
-              if (err) throw err;
-              return managerparent;
-            }
-          );
+          const notesUpdate = await notes.findByIdAndUpdate(args.noteId, { $pull: { labelId: args.labelId } }, { new: true });
           return notesUpdate;
         }
       } catch (error) {
