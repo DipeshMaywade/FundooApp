@@ -11,7 +11,7 @@ class NotesMutation {
       title: {
         type: new GraphQLNonNull(GraphQLString),
       },
-      notes: {
+      description: {
         type: new GraphQLNonNull(GraphQLString),
       },
     },
@@ -24,7 +24,7 @@ class NotesMutation {
           const note = {
             userId: verifiedUser.payload.id,
             title: args.title,
-            notes: args.notes,
+            description: args.description,
           };
           const notesModel = new notes(note);
           const newNotes = await notesModel.save();
@@ -46,7 +46,7 @@ class NotesMutation {
       title: {
         type: new GraphQLNonNull(GraphQLString),
       },
-      notes: {
+      description: {
         type: new GraphQLNonNull(GraphQLString),
       },
     },
@@ -58,9 +58,12 @@ class NotesMutation {
         } else {
           const updatedNote = {
             title: args.title,
-            notes: args.notes,
+            description: args.description,
           };
-          const notesUpdate = await notes.findOneAndUpdate({ _id: args.id, userId: verifiedUser.payload.id }, updatedNote);
+          const notesUpdate = await notes.findOneAndUpdate(
+            { _id: args.id, userId: verifiedUser.payload.id },
+            updatedNote
+          );
           return !notesUpdate ? { title: 'failed to update' } : notesUpdate;
         }
       } catch (error) {
@@ -83,8 +86,13 @@ class NotesMutation {
         if (!verifiedUser) {
           return { title: 'please login first' };
         } else {
-          const notesDelete = await notes.findOneAndDelete({ _id: args.id, userId: verifiedUser.payload.id });
-          return !notesDelete ? { label: 'Note note found' } : { label: 'Note successfully deleted' };
+          const notesDelete = await notes.findOneAndDelete({
+            _id: args.id,
+            userId: verifiedUser.payload.id,
+          });
+          return !notesDelete
+            ? { label: 'Note note found' }
+            : { label: 'Note successfully deleted' };
         }
       } catch (error) {
         loggers.error(`error`, error);

@@ -17,7 +17,7 @@ const notesSchema = new mongoose.Schema(
       type: String,
       require: true,
     },
-    notes: {
+    description: {
       type: String,
       require: true,
     },
