@@ -105,4 +105,18 @@ MongoDBAdapter.prototype.disconnect = function () {
   );
 };
 
-module.exports = MongoDBAdapter;
+//constructor instance and call connect and disconect method
+let db = new MongoDBAdapter(process.env.DB_URL, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useCreateIndex: true,
+  useFindAndModify: false,
+});
+db.connect()
+  .then((uri) => {
+    console.log('Connected to ' + uri);
+  })
+  .catch((uri) => {
+    db.disconnect();
+    console.log('Disconnected from ' + uri);
+  });

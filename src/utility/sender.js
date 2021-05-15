@@ -5,7 +5,6 @@ const logger = require('./logger');
 
 class Publish {
   sentToQueue = (email, token) => {
-    // Create connection to AMQP server
     amqplib.connect('amqp://localhost', (err, connection) => {
       if (err) {
         logger.log('error', `Error from amqplib.connect ${err}`);
