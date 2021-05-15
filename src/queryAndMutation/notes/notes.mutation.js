@@ -1,3 +1,11 @@
+/**
+ * @module        queryAndMutation/notes
+ * @file          labels.mutation.js
+ * @description   perform CRUD opration for notes
+ * @requires      graphql{@linkhttps://www.npmjs.com/package/graphql}
+ * @author        Dipesh Maywade <dipeshmaywade@gmail.com>
+----------------------------------------------------------------------------------------------------*/
+
 const { GraphQLNonNull, GraphQLString } = require('graphql');
 const { notes } = require('../../models/notes');
 const { notesType } = require('../../types/notes');

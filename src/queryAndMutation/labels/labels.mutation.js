@@ -1,3 +1,11 @@
+/**
+ * @module        queryAndMutation/labels
+ * @file          labels.mutation.js
+ * @description   perform CRUD for labels
+ * @requires      graphql{@linkhttps://www.npmjs.com/package/graphql}
+ * @author        Dipesh Maywade <dipeshmaywade@gmail.com>
+----------------------------------------------------------------------------------------------------*/
+
 const { GraphQLNonNull, GraphQLString, GraphQLID } = require('graphql');
 const { labels } = require('../../models/labels');
 const { notes } = require('../../models/notes');
@@ -54,9 +62,13 @@ class labelMutation {
           const updatedLabel = {
             label: args.newLabel,
           };
-          const labelUpdate = await labels.findOneAndUpdate({ _id: args.id }, updatedLabel, (err, result) => {
-            return err ? { label: 'failed to update label' } : result;
-          });
+          const labelUpdate = await labels.findOneAndUpdate(
+            { _id: args.id },
+            updatedLabel,
+            (err, result) => {
+              return err ? { label: 'failed to update label' } : result;
+            }
+          );
           return !labelUpdate ? { label: 'failed to update label' } : labelUpdate;
         }
       } catch (error) {
@@ -80,7 +92,9 @@ class labelMutation {
           return { label: 'please login first' };
         } else {
           const labelDelete = await labels.findOneAndDelete({ _id: args.id });
-          return !labelDelete ? { label: 'label note found' } : { label: 'label successfully deleted' };
+          return !labelDelete
+            ? { label: 'label note found' }
+            : { label: 'label successfully deleted' };
         }
       } catch (error) {
         loggers.error(`error`, error);
@@ -105,7 +119,11 @@ class labelMutation {
         if (!verifiedUser) {
           return { title: 'please login first' };
         } else {
-          const notesUpdate = await notes.findByIdAndUpdate(args.noteId, { $push: { labelId: args.labelId } }, { new: true, upsert: true });
+          const notesUpdate = await notes.findByIdAndUpdate(
+            args.noteId,
+            { $push: { labelId: args.labelId } },
+            { new: true, upsert: true }
+          );
           return notesUpdate;
         }
       } catch (error) {
@@ -131,7 +149,11 @@ class labelMutation {
         if (!verifiedUser) {
           return { title: 'please login first' };
         } else {
-          const notesUpdate = await notes.findByIdAndUpdate(args.noteId, { $pull: { labelId: args.labelId } }, { new: true });
+          const notesUpdate = await notes.findByIdAndUpdate(
+            args.noteId,
+            { $pull: { labelId: args.labelId } },
+            { new: true }
+          );
           return notesUpdate;
         }
       } catch (error) {

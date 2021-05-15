@@ -1,8 +1,17 @@
+/**
+ * @module        queryAndMutation/user
+ * @file          user.query.js
+ * @description   create getAllUser loggedinUser API'S filed
+ * @requires      graphql{@linkhttps://www.npmjs.com/package/graphql}
+ * @requires      mongodb{@linkhttps://www.npmjs.com/package/mongodb}
+ * @author        Dipesh Maywade <dipeshmaywade@gmail.com>
+----------------------------------------------------------------------------------------------------*/
+
 const { GraphQLList } = require('graphql');
+const { ObjectId } = require('mongodb');
 const { userType } = require('../../types/user');
 const { userRegistration } = require('../../models/user');
 const { checkAuth } = require('../../utility/auth');
-const { ObjectId } = require('mongodb');
 
 class Query {
   allUsers = {

@@ -1,6 +1,12 @@
-const mongoose = require('mongoose');
+/**
+ * @module        models
+ * @file          user.js
+ * @description   mongoose schema for users
+ * @requires      {@link http://mongoosejs.com/|mongoose}
+ * @author        Dipesh Maywade <dipeshmaywade@gmail.com>
+----------------------------------------------------------------------------------------------------*/
 
-const ObjectId = mongoose.Schema.ObjectId;
+const mongoose = require('mongoose');
 
 const registration = new mongoose.Schema(
   {

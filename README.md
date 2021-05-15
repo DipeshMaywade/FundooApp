@@ -36,6 +36,15 @@
 > - NodeJS(Run time enviroment) v14.15.3.
 > - npm v7.10.0
 
+**Required application**
+
+> - **[Visual Studio Code](https://www.youtube.com/watch?v=MlIzFUI1QGA)**(Code Editor IDE)
+> - **[MongoDB Compass](https://www.youtube.com/watch?v=FwMwO8pXfq0)**(Database and UI)
+> - **[Redis](https://www.youtube.com/watch?v=188Fy-oCw4w)**(For Caching)
+> - **[RabbitMQ](https://www.youtube.com/watch?v=V9DWKbalbWQ)**(For mail sending in queue)
+> - **[GraphiQL](https://www.electronjs.org/apps/graphiql)**(For Testing)
+> - **[Postman](https://www.youtube.com/watch?v=MCPdfuzmyxY)**(For Testing)
+
 ### Dependencies that are needed to be installed
 
 > - "bcrypt": "^5.0.1"

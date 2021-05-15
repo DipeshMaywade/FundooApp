@@ -1,3 +1,11 @@
+/**
+ * @module        queryAndMutation/labels
+ * @file          labels.query.js
+ * @description   perform GET opration for labels
+ * @requires      graphql{@linkhttps://www.npmjs.com/package/graphql}
+ * @author        Dipesh Maywade <dipeshmaywade@gmail.com>
+----------------------------------------------------------------------------------------------------*/
+
 const { GraphQLList } = require('graphql');
 const { ObjectId } = require('mongodb');
 const { checkAuth } = require('../../utility/auth');

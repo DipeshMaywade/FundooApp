@@ -1,3 +1,10 @@
+/**
+ * @module        models
+ * @file          labels.js
+ * @description   mongoose schema for labels
+ * @requires      {@link http://mongoosejs.com/|mongoose}
+ * @author        Dipesh Maywade <dipeshmaywade@gmail.com>
+----------------------------------------------------------------------------------------------------*/
 const mongoose = require('mongoose');
 const labelSchema = new mongoose.Schema(
   {

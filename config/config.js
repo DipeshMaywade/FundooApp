@@ -105,7 +105,9 @@ MongoDBAdapter.prototype.disconnect = function () {
   );
 };
 
-//constructor instance and call connect and disconect method
+/**
+ * @description createconstructor instance and call connect and disconect method
+ */
 let db = new MongoDBAdapter(process.env.DB_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
