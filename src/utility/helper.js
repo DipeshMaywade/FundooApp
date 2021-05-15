@@ -41,9 +41,15 @@ class Helper {
     firstName: joi.string().pattern(new RegExp('^[A-Z]{1}[a-z]{2,}$')),
     lastName: joi.string().pattern(new RegExp('^[A-Z]{1}[a-z]{2,}$')),
     email: joi.string().email().pattern(new RegExp('^[a-z0-9](.?[a-z0-9]){5,}@g(oogle)?mail.com$')),
-    password: joi.string().pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()]{1}).{8,}$')),
-    newPassword: joi.string().pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()]{1}).{8,}$')),
-    confirmPassword: joi.string().pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()]{1}).{8,}$')),
+    password: joi
+      .string()
+      .pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()]{1}).{8,}$')),
+    newPassword: joi
+      .string()
+      .pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()]{1}).{8,}$')),
+    confirmPassword: joi
+      .string()
+      .pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()]{1}).{8,}$')),
   });
 
   /**
@@ -57,38 +63,6 @@ class Helper {
     } catch (error) {
       logger.error('error', error);
     }
-  };
-
-  /**
-   * @method sendMail
-   * @param token
-   * @param mail
-   * @description used for sending a mail on registered user email id with JWT token for reseting password
-   */
-
-  sendMail = (token, email) => {
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: process.env.EMAIL,
-        pass: process.env.PASSWORD,
-      },
-    });
-    ejs.renderFile('src/views/resetPassword.ejs', (error, result) => {
-      if (error) {
-        logger.log('error', error);
-      } else {
-        const message = {
-          from: process.env.EMAIL,
-          to: email,
-          subject: 'Reset your password',
-          html: `${result}<h4> ${token} </h4>`,
-        };
-        transporter.sendMail(message, (err, info) => {
-          err ? logger.error('error', err) : logger.log(`info`, `email sent to ${info.response}`);
-        });
-      }
-    });
   };
 }
 

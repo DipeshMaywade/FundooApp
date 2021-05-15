@@ -2,7 +2,6 @@ const { GraphQLNonNull, GraphQLString } = require('graphql');
 const {
   validationSchema,
   jwtGenerator,
-  sendMail,
   passEncrypt,
   comparePassword,
 } = require('../../utility/helper');
@@ -151,51 +150,11 @@ class Mutation {
           id: user.id,
           email: user.email,
         };
-        response.success = true;
-        response.message = 'Token send to the registered email id';
-        response.token = jwtGenerator(payload);
-        await publish;
-        return response;
-      } catch (error) {
-        response.success = false;
-        response.message = error;
-        loggers.error(`error`, response);
-        return response;
-      }
-    },
-  };
-
-  forgotPasswordWithMQ = {
-    type: outputType,
-    args: {
-      email: {
-        type: new GraphQLNonNull(GraphQLString),
-      },
-    },
-    resolve: async (root, args) => {
-      let response = {};
-      let result = validationSchema.validate(args);
-      if (result.error) {
-        response.success = false;
-        response.message = result.error.message;
-        return response;
-      }
-      try {
-        let user = await userRegistration.findOne({ email: args.email });
-        if (!user) {
-          response.success = false;
-          response.message = 'incorrect email user not Found';
-          return response;
-        }
-        let payload = {
-          id: user.id,
-          email: user.email,
-        };
-        response.success = true;
-        response.message = 'Token send to the registered email id';
-        response.token = jwtGenerator(payload);
         await getMessage(user.email, response.token);
         await consumeMessage();
+        response.success = true;
+        response.message = 'Token send to the registered email id';
+        response.token = jwtGenerator(payload);
         return response;
       } catch (error) {
         response.success = false;
