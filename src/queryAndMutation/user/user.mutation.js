@@ -1,9 +1,17 @@
 const { GraphQLNonNull, GraphQLString } = require('graphql');
-const { validationSchema, jwtGenerator, sendMail, passEncrypt, comparePassword } = require('../../utility/helper');
+const {
+  validationSchema,
+  jwtGenerator,
+  sendMail,
+  passEncrypt,
+  comparePassword,
+} = require('../../utility/helper');
 const { userRegistration } = require('../../models/user');
 const { userType, outputType } = require('../../types/user');
 const { checkAuth } = require('../../utility/auth');
 const loggers = require('../../utility/logger');
+const { getMessage } = require('../../utility/sender');
+const { consumeMessage } = require('../../utility/reciver');
 
 /** user all type of mutation fields are wrapped into the class
  * @class Mutation
@@ -146,7 +154,48 @@ class Mutation {
         response.success = true;
         response.message = 'Token send to the registered email id';
         response.token = jwtGenerator(payload);
-        await sendMail(response.token, user.email);
+        await publish;
+        return response;
+      } catch (error) {
+        response.success = false;
+        response.message = error;
+        loggers.error(`error`, response);
+        return response;
+      }
+    },
+  };
+
+  forgotPasswordWithMQ = {
+    type: outputType,
+    args: {
+      email: {
+        type: new GraphQLNonNull(GraphQLString),
+      },
+    },
+    resolve: async (root, args) => {
+      let response = {};
+      let result = validationSchema.validate(args);
+      if (result.error) {
+        response.success = false;
+        response.message = result.error.message;
+        return response;
+      }
+      try {
+        let user = await userRegistration.findOne({ email: args.email });
+        if (!user) {
+          response.success = false;
+          response.message = 'incorrect email user not Found';
+          return response;
+        }
+        let payload = {
+          id: user.id,
+          email: user.email,
+        };
+        response.success = true;
+        response.message = 'Token send to the registered email id';
+        response.token = jwtGenerator(payload);
+        await getMessage(user.email, response.token);
+        await consumeMessage();
         return response;
       } catch (error) {
         response.success = false;
@@ -187,7 +236,9 @@ class Mutation {
             return response;
           }
           let newPassword = await passEncrypt(args.confirmPassword);
-          await userRegistration.findByIdAndUpdate(verifiedUser.payload.id, { password: newPassword });
+          await userRegistration.findByIdAndUpdate(verifiedUser.payload.id, {
+            password: newPassword,
+          });
           response.success = true;
           response.message = 'password updated successfully';
           return response;
