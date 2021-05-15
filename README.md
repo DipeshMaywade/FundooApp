@@ -54,7 +54,6 @@
 > - "eslint": "^6.8.0"
 > - "redis": "^3.1.2",
 > - "amqplib": "^0.7.1",
-> - "util": "^0.12.3",
 
 ### Short description about installed npm packages.
 
@@ -89,3 +88,23 @@
 **jsonwebtoken**
 
 > **[Jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken)** Information Exchange: JWTs are a good way of securely transmitting information between parties because they can be signed, which means you can be sure that the senders are who they say they are. Additionally, the structure of a JWT allows you to verify that the content hasn't been tampered with.
+
+**mongodb**
+
+> **[Mongodb](https://www.npmjs.com/package/mongodb)** The official MongoDB Node.js driver allows Node.js applications to connect to MongoDB and work with data. The driver features an asynchronous API which allows you to interact with MongoDB using Promises or via traditional callbacks.
+
+**mongoose**
+
+> **[Mongoose](https://www.npmjs.com/package/mongoose)** is a MongoDB object modeling tool designed to work in an asynchronous environment. Mongoose supports both promises and callbacks.
+
+**nodemailer**
+
+> **[Nodemailer](https://www.npmjs.com/package/nodemailer)** is a Node. js module that allows you to send emails from your server with ease. Whether you want to communicate with your users or just notify yourself when something has gone wrong, one of the options for doing so is through mail.
+
+**redis**
+
+> **[Redis](https://www.npmjs.com/package/redis)** is an open source (BSD licensed), in-memory data structure store, used as a database, cache, and message broker. Redis provides data structures such as strings, hashes, lists, sets, sorted sets with range queries, bitmaps, hyperloglogs, geospatial indexes, and streams.
+
+**amqplib**
+
+> **[amqplib](https://www.npmjs.com/package/amqplib)** is an application layer protocol that lets client applications talk to the server and interact. However, AMQP should not just be considered a protocol used for over-the-wire communication; AMQP defines both the network layer protocol and a high-level architecture for message brokers.
