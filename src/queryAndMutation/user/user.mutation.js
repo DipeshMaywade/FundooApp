@@ -150,11 +150,11 @@ class Mutation {
           id: user.id,
           email: user.email,
         };
-        await getMessage(user.email, response.token);
-        await consumeMessage();
-        response.success = true;
-        response.message = 'Token send to the registered email id';
         response.token = jwtGenerator(payload);
+        await getMessage(user.email, response.token);
+        let message = await consumeMessage();
+        response.success = true;
+        response.message = message;
         return response;
       } catch (error) {
         response.success = false;

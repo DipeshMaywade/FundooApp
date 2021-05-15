@@ -1,78 +1,56 @@
 require('dotenv').config();
 const amqplib = require('amqplib/callback_api');
 const nodemailer = require('nodemailer');
+const logger = require('./logger');
 
-class Subscriber {
+class Receiver {
   consumeMessage = () => {
-    // Setup Nodemailer transport
     const transport = nodemailer.createTransport({
-      service: 'gmail',
+      service: process.env.SERVICE,
       secure: true,
     });
-
-    // Create connection to AMQP server
     amqplib.connect('amqp://localhost', (err, connection) => {
       if (err) {
-        return err;
+        logger.log('error', `Error from amqp connection ${err}`);
+        return 'Error in consumer connection';
       }
       // Create channel
       connection.createChannel((err, channel) => {
         if (err) {
-          return err;
+          logger.log('error', `Error from creating a channel ${err}`);
+          return;
         }
-
         // Ensure queue for messages
-        channel.assertQueue(
-          'EmailInQueues1',
-          {
-            // Ensure that the queue is not deleted when server restarts
-            durable: true,
-          },
-          (err) => {
-            if (err) {
-              return err;
-            }
-
-            // Only request 1 unacked message from queue
-            // This value indicates how many messages we want to process in parallel
-            channel.prefetch(1);
-
-            // Set up callback to handle messages received from the queue
-            channel.consume('EmailInQueues1', (data) => {
-              if (data === null) {
-                console.log('null data');
-                return;
-              }
-
-              // Decode message contents
-              let message = JSON.parse(data.content.toString());
-
-              // attach message specific authentication options
-              // this is needed if you want to send different messages from
-              // different user accounts
-              message.auth = {
-                user: process.env.EMAIL,
-                pass: process.env.PASSWORD,
-              };
-
-              // Send the message using the previously set up Nodemailer transport
-              transport.sendMail(message, (err, info) => {
-                if (err) {
-                  console.log('getting error in sending data', err);
-                  // put the failed message item back to queue
-                  return channel.nack(data);
-                }
-                console.log('Delivered message %s', info.messageId);
-                // remove message item from the queue
-                channel.ack(data);
-                return message.link;
-              });
-            });
+        channel.assertQueue('EmailInQueues1', { durable: true }, (err) => {
+          if (err) {
+            logger.log('error', `Error from creating a channel ${err}`);
+            return;
           }
-        );
+          channel.consume('EmailInQueues1', (data) => {
+            if (data === null) {
+              console.log('null data');
+              return;
+            }
+            let message = JSON.parse(data.content.toString());
+            message.auth = {
+              user: process.env.EMAIL,
+              pass: process.env.PASSWORD,
+            };
+            transport.sendMail(message, (err, info) => {
+              if (err) {
+                console.log('getting error in sending data', err);
+                //item back to queue
+                return channel.nack(data);
+              }
+              console.log('Delivered message %s', info.messageId);
+              // remove message item from the queue
+              channel.ack(data);
+            });
+          });
+        });
       });
     });
   };
 }
 
-module.exports = new Subscriber();
+module.exports = new Receiver();
