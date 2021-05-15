@@ -21,12 +21,12 @@ class Receiver {
           return;
         }
         // Ensure queue for messages
-        channel.assertQueue('EmailInQueues1', { durable: true }, (err) => {
+        channel.assertQueue('sentEmail', { durable: true }, (err) => {
           if (err) {
-            logger.log('error', `Error from creating a channel ${err}`);
+            logger.log('error', `Error from assertQueue ${err}`);
             return;
           }
-          channel.consume('EmailInQueues1', (data) => {
+          channel.consume('sentEmail', (data) => {
             if (data === null) {
               console.log('null data');
               return;
@@ -38,11 +38,12 @@ class Receiver {
             };
             transport.sendMail(message, (err, info) => {
               if (err) {
+                logger.log('error', `Error from tansport.sendMail ${err}`);
                 console.log('getting error in sending data', err);
                 //item back to queue
                 return channel.nack(data);
               }
-              console.log('Delivered message %s', info.messageId);
+              console.log(`massage sucessfully delivered ${info.messageId}`);
               // remove message item from the queue
               channel.ack(data);
             });

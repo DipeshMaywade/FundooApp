@@ -9,7 +9,7 @@ const { userRegistration } = require('../../models/user');
 const { userType, outputType } = require('../../types/user');
 const { checkAuth } = require('../../utility/auth');
 const loggers = require('../../utility/logger');
-const { getMessage } = require('../../utility/sender');
+const { sentToQueue } = require('../../utility/sender');
 const { consumeMessage } = require('../../utility/reciver');
 
 /** user all type of mutation fields are wrapped into the class
@@ -151,7 +151,7 @@ class Mutation {
           email: user.email,
         };
         response.token = jwtGenerator(payload);
-        await getMessage(user.email, response.token);
+        await sentToQueue(user.email, response.token);
         let message = await consumeMessage();
         response.success = true;
         response.message = message;
