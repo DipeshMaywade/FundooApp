@@ -7,6 +7,7 @@
 ----------------------------------------------------------------------------------------------------*/
 
 const { GraphQLNonNull, GraphQLString } = require('graphql');
+const { GraphQLUpload } = require('graphql-upload');
 const { validationSchema, jwtGenerator, passEncrypt, comparePassword } = require('../../utility/helper');
 const { userRegistration } = require('../../models/user');
 const { userType, outputType } = require('../../types/user');
@@ -213,6 +214,34 @@ class Mutation {
       } else {
         response.success = false;
         response.message = 'password does not matched or invalid formate';
+        return response;
+      }
+    },
+  };
+
+  uploadAvtarImage = {
+    type: outputType,
+    args: {
+      file: {
+        type: new GraphQLNonNull(GraphQLUpload),
+      },
+      bucketName: {
+        type: new GraphQLNonNull(GraphQLString),
+      },
+    },
+    resolve: async (_, args, context) => {
+      let response = {};
+      const verifiedUser = await checkAuth(context);
+      try {
+        if (!verifiedUser) {
+          response.success = false;
+          response.message = 'please login first..!';
+          return response;
+        }
+      } catch (error) {
+        response.success = false;
+        response.message = error;
+        loggers.error(`error`, response);
         return response;
       }
     },

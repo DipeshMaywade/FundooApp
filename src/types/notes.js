@@ -1,6 +1,4 @@
 const { GraphQLObjectType, GraphQLString, GraphQLID, GraphQLList } = require('graphql');
-const { labels } = require('../models/labels');
-const { labelType } = require('./labels');
 
 const notesType = new GraphQLObjectType({
   name: 'Notes',
