@@ -29,6 +29,10 @@ const registration = new mongoose.Schema(
       unique: true,
       match: [/^[a-z0-9](\.?[a-z0-9]){5,}@g(oogle)?mail\.com$/, 'please enter valid email'],
     },
+    imageUrl: {
+      type: String,
+      require: true,
+    },
   },
   { timestamps: true }
 );

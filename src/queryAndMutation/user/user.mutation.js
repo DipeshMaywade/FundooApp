@@ -15,6 +15,9 @@ const { checkAuth } = require('../../utility/auth');
 const loggers = require('../../utility/logger');
 const { sentToQueue } = require('../../utility/sender');
 const { consumeMessage } = require('../../utility/reciver');
+const { promisify } = require('util');
+const { extname } = require('path');
+const S3 = require('../../../config/awsConfig');
 
 /** user all type of mutation fields are wrapped into the class
  * @class Mutation
@@ -219,7 +222,7 @@ class Mutation {
     },
   };
 
-  uploadAvtarImage = {
+  uploadAvatarImage = {
     type: outputType,
     args: {
       file: {
@@ -238,9 +241,33 @@ class Mutation {
           response.message = 'please login first..!';
           return response;
         }
+        const params = {
+          Bucket: args.bucketName,
+          Key: '',
+          Body: '',
+          ACL: 'public-read',
+        };
+
+        let { createReadStream, filename } = await args.file;
+        let fileStream = createReadStream();
+        fileStream.on('error', (error) => console.error(error));
+        params.Body = fileStream;
+        console.log(fileStream);
+        let timestamp = new Date().getTime();
+        let file_extension = extname(filename);
+        params.Key = `AvatarImages/${timestamp}${file_extension}`;
+
+        let upload = promisify(S3.upload.bind(S3));
+        let result = await upload(params).catch(console.log);
+
+        let object = {
+          success: true,
+          message: `download url: ${result.Location}`,
+        };
+        return object;
       } catch (error) {
         response.success = false;
-        response.message = error;
+        response.message = 'failed';
         loggers.error(`error`, response);
         return response;
       }

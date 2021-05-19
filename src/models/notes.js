@@ -7,7 +7,7 @@
 ----------------------------------------------------------------------------------------------------*/
 
 const mongoose = require('mongoose');
-
+//strict for mongoDB
 const notesSchema = new mongoose.Schema(
   {
     userId: {
