@@ -254,11 +254,14 @@ class Mutation {
         params.Body = fileStream;
         console.log(fileStream);
         let timestamp = new Date().getTime();
-        let file_extension = extname(filename);
-        params.Key = `AvatarImages/${timestamp}${file_extension}`;
+        params.Key = `AvatarImages/${filename}${timestamp}`;
 
         let upload = promisify(S3.upload.bind(S3));
         let result = await upload(params).catch(console.log);
+
+        await userRegistration.findByIdAndUpdate(verifiedUser.payload.id, {
+          imageUrl: result.Location,
+        });
 
         let object = {
           success: true,
