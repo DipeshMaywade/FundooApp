@@ -6,7 +6,7 @@
  * @author        Dipesh Maywade <dipeshmaywade@gmail.com>
 ----------------------------------------------------------------------------------------------------*/
 
-const { GraphQLNonNull, GraphQLString } = require('graphql');
+const { GraphQLNonNull, GraphQLString, GraphQLID } = require('graphql');
 const { notes } = require('../../models/notes');
 const { notesType } = require('../../types/notes');
 const { checkAuth } = require('../../utility/auth');
@@ -68,15 +68,34 @@ class NotesMutation {
             title: args.title,
             description: args.description,
           };
-          const notesUpdate = await notes.findOneAndUpdate(
-            { _id: args.id, userId: verifiedUser.payload.id },
-            updatedNote
-          );
+          const notesUpdate = await notes.findOneAndUpdate({ _id: args.id, userId: verifiedUser.payload.id }, updatedNote);
           return !notesUpdate ? { title: 'failed to update' } : notesUpdate;
         }
       } catch (error) {
         loggers.error(`error`, error);
         return { title: error };
+      }
+    },
+  };
+
+  moveToTrash = {
+    type: notesType,
+    args: {
+      id: {
+        type: new GraphQLNonNull(GraphQLID),
+      },
+    },
+    resolve: async (root, args, context) => {
+      const verifiedUser = await checkAuth(context);
+      try {
+        if (!verifiedUser) {
+          return { title: 'please login first' };
+        } else {
+          const notesDelete = await notes.findByIdAndUpdate(args.id, { trash: true });
+          return !notesDelete ? { title: 'Note note found' } : { title: 'Note successfully moved to trash' };
+        }
+      } catch (error) {
+        loggers.error(`error`, error);
       }
     },
   };
@@ -98,9 +117,7 @@ class NotesMutation {
             _id: args.id,
             userId: verifiedUser.payload.id,
           });
-          return !notesDelete
-            ? { label: 'Note note found' }
-            : { label: 'Note successfully deleted' };
+          return !notesDelete ? { title: 'Note note found' } : { title: 'Note successfully deleted' };
         }
       } catch (error) {
         loggers.error(`error`, error);

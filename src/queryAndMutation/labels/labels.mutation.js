@@ -119,7 +119,7 @@ class labelMutation {
         });
         if (checkLabels.length != 0) {
           return {
-            title: 'This label is already attach..',
+            title: 'This label is already attached..',
           };
         }
         const notesUpdate = await notes.findByIdAndUpdate(args.noteId, { $push: { labelId: args.labelId } }, { new: true, upsert: true });
