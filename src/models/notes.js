@@ -18,6 +18,7 @@ const notesSchema = new mongoose.Schema(
     labelId: [
       {
         type: mongoose.Schema.Types.ObjectId,
+        unique: true,
         ref: 'labels',
       },
     ],
