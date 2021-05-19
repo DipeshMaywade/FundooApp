@@ -221,7 +221,14 @@ class Mutation {
       }
     },
   };
-
+  /**
+   * @fileds uploadAvatarImage
+   * @type outputType
+   * @param {resolveParameter} root
+   * @param {resolveParameter} args
+   * @param {resolveParameter} context
+   * @description uploading Avatar image and sotre that image into s3 bucket and image url stored in mongoDB
+   */
   uploadAvatarImage = {
     type: outputType,
     args: {
