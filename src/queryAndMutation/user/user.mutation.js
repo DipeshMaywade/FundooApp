@@ -8,14 +8,14 @@
 
 const { GraphQLNonNull, GraphQLString } = require('graphql');
 const { GraphQLUpload } = require('graphql-upload');
+const { promisify } = require('util');
 const { validationSchema, jwtGenerator, passEncrypt, comparePassword } = require('../../utility/helper');
 const { userRegistration } = require('../../models/user');
 const { userType, outputType } = require('../../types/user');
 const { checkAuth } = require('../../utility/auth');
-const loggers = require('../../utility/logger');
 const { sentToQueue } = require('../../utility/sender');
 const { consumeMessage } = require('../../utility/reciver');
-const { promisify } = require('util');
+const loggers = require('../../utility/logger');
 const S3 = require('../../../config/awsConfig');
 require('dotenv').config();
 
@@ -221,6 +221,7 @@ class Mutation {
       }
     },
   };
+
   /**
    * @fileds uploadAvatarImage
    * @type outputType
