@@ -16,8 +16,8 @@ const loggers = require('../../utility/logger');
 const { sentToQueue } = require('../../utility/sender');
 const { consumeMessage } = require('../../utility/reciver');
 const { promisify } = require('util');
-const { extname } = require('path');
 const S3 = require('../../../config/awsConfig');
+require('dotenv').config();
 
 /** user all type of mutation fields are wrapped into the class
  * @class Mutation
@@ -228,9 +228,6 @@ class Mutation {
       file: {
         type: new GraphQLNonNull(GraphQLUpload),
       },
-      bucketName: {
-        type: new GraphQLNonNull(GraphQLString),
-      },
     },
     resolve: async (_, args, context) => {
       let response = {};
@@ -242,7 +239,7 @@ class Mutation {
           return response;
         }
         const params = {
-          Bucket: args.bucketName,
+          Bucket: process.env.BUCKET_NAME,
           Key: '',
           Body: '',
           ACL: 'public-read',
@@ -254,7 +251,7 @@ class Mutation {
         params.Body = fileStream;
         console.log(fileStream);
         let timestamp = new Date().getTime();
-        params.Key = `AvatarImages/${filename}${timestamp}`;
+        params.Key = `AvatarImages/${timestamp}${filename}`;
 
         let upload = promisify(S3.upload.bind(S3));
         let result = await upload(params).catch(console.log);
