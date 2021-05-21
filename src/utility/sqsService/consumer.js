@@ -10,8 +10,8 @@ module.exports = consumefromSQS = () => {
 
   // Configure Nodemailer to user Gmail
   let transport = nodemailer.createTransport({
-    host: 'smtp.googlemail.com',
-    port: 587,
+    host: process.env.MAIL_HOST,
+    port: process.env.PORT_MAIL,
     auth: {
       user: process.env.EMAIL,
       pass: process.env.PASSWORD,

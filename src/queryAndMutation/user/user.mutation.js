@@ -211,7 +211,7 @@ class Mutation {
         await sentToSQS(user.email, response.token);
         let message = await consumefromSQS();
         response.success = true;
-        response.message = 'done';
+        response.message = 'Token sent to the registered email address';
         return response;
       } catch (error) {
         response.success = false;
