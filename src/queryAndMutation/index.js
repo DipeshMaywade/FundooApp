@@ -8,7 +8,7 @@
 ----------------------------------------------------------------------------------------------------*/
 
 const { GraphQLSchema, GraphQLObjectType } = require('graphql');
-const { addUser, loginUser, forgotPassword, resetPassword, uploadAvatarImage } = require('./user/user.mutation');
+const { addUser, loginUser, forgotPassword, forgotPasswordWithSQS, resetPassword, uploadAvatarImage } = require('./user/user.mutation');
 const { addNotes, updateNotes, moveToTrash, deleteNote } = require('./notes/notes.mutation');
 const { createLabel, updateLabelName, deleteLabel, addLabelOnNotes, removeLabelOnNotes } = require('./labels/labels.mutation');
 const { getNotes } = require('./notes/notes.query');
@@ -26,6 +26,7 @@ const mutation = new GraphQLObjectType({
     addUser,
     loginUser,
     forgotPassword,
+    forgotPasswordWithSQS,
     resetPassword,
     uploadAvatarImage,
     addNotes,

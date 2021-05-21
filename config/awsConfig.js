@@ -1,6 +1,5 @@
-require('dotenv').config();
-
 const aws = require('aws-sdk');
+require('dotenv').config();
 
 aws.config.update({
   secretAccessKey: process.env.SECRETACCESSKEY,
@@ -9,4 +8,6 @@ aws.config.update({
 });
 
 const s3 = new aws.S3();
-module.exports = s3;
+const sqs = new aws.SQS({ apiVersion: '2012-11-05' });
+
+module.exports = { s3, sqs };

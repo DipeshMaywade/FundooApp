@@ -15,6 +15,8 @@ const { userType, outputType } = require('../../types/user');
 const { checkAuth } = require('../../utility/auth');
 const { sentToQueue } = require('../../utility/sender');
 const { consumeMessage } = require('../../utility/reciver');
+const sentToSQS = require('../../utility/sqsService/publisher');
+const consumefromSQS = require('../../utility/sqsService/consumer');
 const loggers = require('../../utility/logger');
 const S3 = require('../../../config/awsConfig');
 require('dotenv').config();
@@ -52,7 +54,7 @@ class Mutation {
     resolve: async (root, data) => {
       const result = validationSchema.validate(data);
       if (result.error) {
-        return { firstName: result.error.message };
+        return { firstName: 'validation failed' };
       }
       try {
         data.password = await passEncrypt(data.password);
@@ -90,7 +92,7 @@ class Mutation {
       const response = {};
       const result = validationSchema.validate(args);
       if (result.error) {
-        return { message: result.error.message };
+        return { message: 'validation failed' };
       }
       try {
         let user = await userRegistration.findOne({ email: args.email });
@@ -143,7 +145,7 @@ class Mutation {
       let result = validationSchema.validate(args);
       if (result.error) {
         response.success = false;
-        response.message = result.error.message;
+        response.message = 'validation failed';
         return response;
       }
       try {
@@ -162,6 +164,54 @@ class Mutation {
         let message = await consumeMessage();
         response.success = true;
         response.message = message;
+        return response;
+      } catch (error) {
+        response.success = false;
+        response.message = error;
+        loggers.error(`error`, response);
+        return response;
+      }
+    },
+  };
+
+  /**
+   * @fileds forgotPassword
+   * @type outputType
+   * @param {resolveParameter} root
+   * @param {resolveParameter} args
+   * @description forgotPassword fields provide ability to send mail on registered email ID with reset password token.
+   */
+  forgotPasswordWithSQS = {
+    type: outputType,
+    args: {
+      email: {
+        type: new GraphQLNonNull(GraphQLString),
+      },
+    },
+    resolve: async (root, args) => {
+      let response = {};
+      let result = validationSchema.validate(args);
+      if (result.error) {
+        response.success = false;
+        response.message = 'validation failed';
+        return response;
+      }
+      try {
+        let user = await userRegistration.findOne({ email: args.email });
+        if (!user) {
+          response.success = false;
+          response.message = 'incorrect email user not Found';
+          return response;
+        }
+        let payload = {
+          id: user.id,
+          email: user.email,
+        };
+        response.token = await jwtGenerator(payload);
+        await sentToSQS(user.email, response.token);
+        let message = await consumefromSQS();
+        response.success = true;
+        response.message = 'done';
         return response;
       } catch (error) {
         response.success = false;
@@ -268,11 +318,9 @@ class Mutation {
           imageUrl: result.Location,
         });
 
-        let object = {
-          success: true,
-          message: `download url: ${result.Location}`,
-        };
-        return object;
+        response.success = true;
+        response.message = `download url: ${result.Location}`;
+        return response;
       } catch (error) {
         response.success = false;
         response.message = 'failed';

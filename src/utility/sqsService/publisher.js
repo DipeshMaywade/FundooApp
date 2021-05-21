@@ -31,11 +31,13 @@ module.exports = sentToSQS = (email, token) => {
   // Send the order data to the SQS queue
   let sendSqsMessage = AWS.sqs.sendMessage(sqsData).promise();
 
+  //console.log(sendSqsMessage.MessageId);
   sendSqsMessage
     .then((data) => {
-      logger.log(`info: ${data.MessageId}`);
+      logger.log(`info`, `${data.MessageId}`);
+      console.log(data.MessageId);
     })
     .catch((err) => {
-      logger.log(`error: ${err}`);
+      logger.log(`error`, `${err}`);
     });
 };
