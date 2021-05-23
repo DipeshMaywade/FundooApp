@@ -1,9 +1,9 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const { graphqlHTTP } = require('express-graphql');
 const schema = require('./src/queryAndMutation/index');
 const logger = require('./src/utility/logger');
 require('./config/config');
+require('./config/redisConfig');
 require('dotenv').config();
 const app = express();
 const { graphqlUploadExpress } = require('graphql-upload');
