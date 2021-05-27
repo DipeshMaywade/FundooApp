@@ -19,6 +19,7 @@ const sentToSQS = require('../../utility/sqsService/publisher');
 const consumefromSQS = require('../../utility/sqsService/consumer');
 const loggers = require('../../utility/logger');
 const S3 = require('../../../config/awsConfig');
+const { subs } = require('../../utility/snsService/subscribe');
 require('dotenv').config();
 
 /** user all type of mutation fields are wrapped into the class
@@ -59,10 +60,11 @@ class Mutation {
       try {
         data.password = await passEncrypt(data.password);
         const userModel = new userRegistration(data);
-        const newUser = userModel.save();
+        const newUser = await userModel.save();
         if (!newUser) {
           return { firstName: 'failed to save' };
         }
+        await subs(newUser.email);
         return newUser;
       } catch (error) {
         loggers.error(`error`, error);

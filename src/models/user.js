@@ -37,6 +37,6 @@ const registration = new mongoose.Schema(
   { timestamps: true }
 );
 
-const userRegistration = mongoose.model('UserRegistration', registration);
+const userRegistration = mongoose.model('User', registration);
 
 module.exports = { userRegistration };
