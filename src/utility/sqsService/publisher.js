@@ -35,7 +35,6 @@ module.exports = sentToSQS = (email, token) => {
   sendSqsMessage
     .then((data) => {
       logger.log(`info`, `${data.MessageId}`);
-      console.log(data.MessageId);
     })
     .catch((err) => {
       logger.log(`error`, `${err}`);

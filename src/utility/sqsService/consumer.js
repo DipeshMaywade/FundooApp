@@ -20,23 +20,52 @@ module.exports = consumefromSQS = () => {
 
   function sendMail(message) {
     let sqsMessage = JSON.parse(message.Body);
-
-    const emailMessage = {
-      to: sqsMessage.userEmail, // Recipient address
-      subject: 'Token For Reset Password', // Subject line
-      html: `<head>
-      <title>Reset Password</title>
-  </head>
-  <body>
-      <h3>Hello ${sqsMessage.userEmail}</h3>
-      <h4> Your Reset Password Token is: ${sqsMessage.token}  </h4>
-      <h4> Thank You </h4>
-  </body>`,
+    const params = {
+      Destination: {
+        ToAddresses: [sqsMessage.userEmail],
+      },
+      Message: {
+        Body: {
+          Html: {
+            Charset: 'UTF-8',
+            Data: `<head>
+                 <title>Reset Password</title>
+             </head>
+             <body>
+                 <h3>Hello ${sqsMessage.userEmail}</h3>
+                 <h4> Your Reset Password Token is: ${sqsMessage.token}  </h4>
+                 <h4> Thank You </h4>
+             </body>`,
+          },
+        },
+        Subject: {
+          Charset: 'UTF-8',
+          Data: 'Reset Password',
+        },
+      },
+      Source: process.env.EMAIL,
     };
 
-    transport.sendMail(emailMessage, (err, info) => {
-      err ? logger.log(`info`, `${err}`) : logger.log(`error`, `${info}`);
+    aws.ses.sendEmail(params, (err, data) => {
+      err ? logger.log('error', `Error From ses SendEmail ${err}`) : logger.log('inf0', `From ses SendMail ${data}`);
     });
+
+    //   let sqsMessage = JSON.parse(message.Body);
+    //   const emailMessage = {
+    //     to: sqsMessage.userEmail, // Recipient address
+    //     subject: 'Token For Reset Password', // Subject line
+    //     html: `<head>
+    //     <title>Reset Password</title>
+    // </head>
+    // <body>
+    //     <h3>Hello ${sqsMessage.userEmail}</h3>
+    //     <h4> Your Reset Password Token is: ${sqsMessage.token}  </h4>
+    //     <h4> Thank You </h4>
+    // </body>`,
+    //   };
+    //   transport.sendMail(emailMessage, (err, info) => {
+    //     err ? logger.log(`info`, `${err}`) : logger.log(`error`, `${info}`);
+    //   });
   }
 
   // Create our consumer
