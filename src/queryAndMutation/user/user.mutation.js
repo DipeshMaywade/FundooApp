@@ -21,6 +21,7 @@ const loggers = require('../../utility/logger');
 const S3 = require('../../../config/awsConfig');
 const { subs } = require('../../utility/snsService/subscribe');
 const { publish } = require('../../utility/snsService/publisher');
+const { verifyMail } = require('../../utility/sesService/verifyMail');
 require('dotenv').config();
 
 /** user all type of mutation fields are wrapped into the class
@@ -66,6 +67,7 @@ class Mutation {
           return { firstName: 'failed to save' };
         }
         await subs(newUser.email);
+        await verifyMail(newUser.email);
         return newUser;
       } catch (error) {
         loggers.error(`error`, error);
