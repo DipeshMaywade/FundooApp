@@ -9,5 +9,6 @@ aws.config.update({
 
 const s3 = new aws.S3();
 const sqs = new aws.SQS({ apiVersion: '2012-11-05' });
+const sns = new aws.SNS();
 
-module.exports = { s3, sqs };
+module.exports = { s3, sqs, sns };
