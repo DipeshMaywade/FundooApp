@@ -20,6 +20,7 @@ const consumefromSQS = require('../../utility/sqsService/consumer');
 const loggers = require('../../utility/logger');
 const S3 = require('../../../config/awsConfig');
 const { subs } = require('../../utility/snsService/subscribe');
+const { publish } = require('../../utility/snsService/publisher');
 require('dotenv').config();
 
 /** user all type of mutation fields are wrapped into the class
@@ -117,6 +118,7 @@ class Mutation {
           response.success = true;
           response.message = 'Login successful';
           response.token = jwtGenerator(payload);
+          await publish(user.firstName);
           return response;
         }
       } catch (error) {
