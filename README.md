@@ -117,3 +117,68 @@
 **amqplib**
 
 > **[amqplib](https://www.npmjs.com/package/amqplib)** is an application layer protocol that lets client applications talk to the server and interact. However, AMQP should not just be considered a protocol used for over-the-wire communication; AMQP defines both the network layer protocol and a high-level architecture for message brokers.
+
+**aws-sdk**
+
+> **[aws-sdk](https://www.npmjs.com/package/aws-sdk)** The AWS SDK for JavaScript v3 API Reference Guide provides a JavaScript API for AWS services. You can use the JavaScript API to build libraries or applications for Node.js or the browser.
+
+# FundooNotes Production Documentation
+
+## Application deployment on AWS EC2 Instance With Jenkins
+
+> - Log into your AWS console search for and select EC2
+> - You have to create two instances for jenkins and your app server separately.
+> - Beginning with creating a jenkins server.
+> - Select Launch Instance
+> - Choose Ubuntu Server 16.04 LTS (HVM), SSD Volume Type. Select the free tiered Ubuntu Server 16.04 LTS
+> - Choose an Instance Type and choose next.
+> - Configure Security Group and choose Create a new security group
+> - Confirm that port 22 is configured to allow access to your VM and also add a new security group choose custom tcp rule and set the port range to 8080 and next type 0.0.0.0/0 in source.
+> - Finally review and launch.
+> - After you select Launch you will be prompted to Select an existing key pair or to create one.
+> - Create a new key pair and download it.
+> - Now open the terminal and go to the folder you have downloaded the key pair and connect to the instance by firing the commands which is mentioned.
+> - Install Java : https://www.digitalocean.com/community/tutorials/how-to-install-java-with-apt-get-on-ubuntu-16-04
+> - Go through this link and install jenkins : https://medium.com/@Marklon/how-to-install-jenkins-on-ubuntu-16-04-on-aws-e584c45c2684
+> - Check the status and configure the firewall settings.
+> - Once you've logged in click on new item and type the name of your jenkins project and choose freestyle project.
+> - In the general option select GitHub project and paste the URL of your GitHub repository.
+> - Under the source code management choose git and paste the URL of your github repository.
+> - Under build triggers choose GitHub hook trigger for GITScm polling.
+> - Under build choose execute shell and write the script
+> - Apply and save.
+> - Go to your GitHub and open the settings of the repository you want to deploy and click on webhooks and then add webhook, in the payload URL type http://yourJenkinsPublicIP:8080/github-webhook/ and then click on add webhook. If it shows a green tick the webhook has been added successfully.
+> - Go to Jenkins and then go to the project and click on build now. It'll show a blue indication if it's successful.
+> - Now we have to integrate the jenkins and the node app servers.
+> - Connect to the instances on separate terminals.
+> - SSH to jenkins (in the jenkins terminal)
+
+       * Switch to Jenkins user -  sudo su Jenkins
+       * Generate ssh key -  ssh-keygen -t rsa
+       * Save the generated key in /var/lib/jenkins/.ssh/id_rsa
+       * Leave the passphrase empty
+       * Print the SSH key you just created -  cat ~/.ssh/id_rsa.pub
+       * Copy this Key
+
+> - SSH to your app server
+
+       • Open the file where authorized keys are stored -
+          nano ~/.ssh/authorized_keys
+       • Paste the key which you copied
+         (Ctrl+S and then Ctrl+X then Y then Enter)
+
+> - To check whether your Jenkins server already has SSH access to node-app server without entering a password. Run these command:
+>   sudo su - jenkins
+>   ssh ubuntu@NODE.APP.SERVER.PRIVATE.IP
+> - Copy your project from jenkins workspace to app server by the following command in the jenkins terminal:
+>   sudo su jenkins
+>   scp -r /var/lib/jenkins/workspace/{nameOfYourProject} ubuntu@NODE.SERVER.PRIVATE.IP:/home/ubuntu
+> - ssh into app server and check if your project has been copied by running the command ls
+> - Once it's copied Install all the necessary things like node,npm,mongoDb,redis etc and then go to your project directory and create the .env and later install all the dependencies by running "npm i"
+> - Start your server
+> - Type the public ip of your appServer followed by the port number of your app and check if it has been deployed.
+
+> - Check the following links :
+>   https://medium.com/konvergen/jenkins-for-node-js-app-on-aws-ec2-part-1-installing-jenkins-on-ec2-24675cc08998
+>   https://medium.com/konvergen/jenkins-for-node-js-app-on-aws-ec2-part-2-creating-a-node-js-app-3a0fb6b63bc7
+>   https://medium.com/konvergen/jenkins-for-node-js-app-on-aws-ec2-part-3-jenkins-node-js-app-integration-1fa9d1306d25
