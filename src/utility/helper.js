@@ -1,8 +1,6 @@
 const bcrypt = require('bcrypt');
 const joi = require('joi');
 const jwt = require('jsonwebtoken');
-const nodemailer = require('nodemailer');
-const ejs = require('ejs');
 const logger = require('./logger');
 
 require('dotenv').config();
@@ -41,15 +39,9 @@ class Helper {
     firstName: joi.string().pattern(new RegExp('^[A-Z]{1}[a-z]{2,}$')),
     lastName: joi.string().pattern(new RegExp('^[A-Z]{1}[a-z]{2,}$')),
     email: joi.string().email().pattern(new RegExp('^[a-z0-9](.?[a-z0-9]){5,}@g(oogle)?mail.com$')),
-    password: joi
-      .string()
-      .pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()]{1}).{8,}$')),
-    newPassword: joi
-      .string()
-      .pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()]{1}).{8,}$')),
-    confirmPassword: joi
-      .string()
-      .pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()]{1}).{8,}$')),
+    password: joi.string().pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()]{1}).{8,}$')),
+    newPassword: joi.string().pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()]{1}).{8,}$')),
+    confirmPassword: joi.string().pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()]{1}).{8,}$')),
   });
 
   /**
