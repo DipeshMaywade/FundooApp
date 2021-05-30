@@ -122,9 +122,9 @@
 
 > **[aws-sdk](https://www.npmjs.com/package/aws-sdk)** The AWS SDK for JavaScript v3 API Reference Guide provides a JavaScript API for AWS services. You can use the JavaScript API to build libraries or applications for Node.js or the browser.
 
-# FundooNotes Production Documentation
+## FundooNotes Production Documentation
 
-## Application deployment on AWS EC2 Instance With Jenkins
+### Application deployment on AWS EC2 Instance With Jenkins
 
 > - Log into your AWS console search for and select EC2
 > - You have to create two instances for jenkins and your app server separately.
@@ -179,6 +179,4 @@
 > - Type the public ip of your appServer followed by the port number of your app and check if it has been deployed.
 
 > - Check the following links :
->   https://medium.com/konvergen/jenkins-for-node-js-app-on-aws-ec2-part-1-installing-jenkins-on-ec2-24675cc08998
->   https://medium.com/konvergen/jenkins-for-node-js-app-on-aws-ec2-part-2-creating-a-node-js-app-3a0fb6b63bc7
->   https://medium.com/konvergen/jenkins-for-node-js-app-on-aws-ec2-part-3-jenkins-node-js-app-integration-1fa9d1306d25
+>   https://medium.com/konvergen/jenkins-for-node-js-app-on-aws-ec2-part-1-installing-jenkins-on-ec2-24675cc08998 > > https://medium.com/konvergen/jenkins-for-node-js-app-on-aws-ec2-part-2-creating-a-node-js-app-3a0fb6b63bc7 > > https://medium.com/konvergen/jenkins-for-node-js-app-on-aws-ec2-part-3-jenkins-node-js-app-integration-1fa9d1306d25

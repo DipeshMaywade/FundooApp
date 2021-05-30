@@ -215,7 +215,7 @@ class Mutation {
         };
         response.token = await jwtGenerator(payload);
         await sentToSQS(user.email, response.token);
-        let message = await consumefromSQS();
+        await consumefromSQS();
         response.success = true;
         response.message = 'Token sent to the registered email address';
         return response;

@@ -36,7 +36,7 @@ module.exports = consumefromSQS = () => {
     };
 
     aws.ses.sendEmail(params, (err, data) => {
-      err ? logger.log('error', `Error From ses SendEmail ${err}`) : logger.log('inf0', `From ses SendMail ${data}`);
+      err ? logger.log('error', `Error From ses SendEmail ${err}`) : logger.log('info', `From ses SendMail ${data}`);
     });
   }
 
