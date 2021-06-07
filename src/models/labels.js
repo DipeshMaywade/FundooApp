@@ -21,5 +21,4 @@ const labelSchema = new mongoose.Schema(
 );
 
 const labels = mongoose.model('labels', labelSchema);
-
 module.exports = { labels };
